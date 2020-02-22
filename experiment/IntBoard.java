@@ -9,8 +9,9 @@ public class IntBoard {//Test
 	private Set<BoardCell> visited;
 	
 	public void calcAdjacencies() {
+		Set<BoardCell> adjacentCellSet;
 		for(BoardCell currentCell : myCells) {
-			Set<BoardCell> adjacentCellSet = new HashSet<BoardCell>();
+			adjacentCellSet = new HashSet<BoardCell>();
 			//Cell above
 			if(currentCell.getRow() > 0) {
 				adjacentCellSet.add(grid[currentCell.getRow() - 1][currentCell.getColumn()]);
@@ -50,9 +51,8 @@ public class IntBoard {//Test
 				else {
 					findAllTargets(adjacent, numSteps - 1);
 				}
+				visited.remove(adjacent);
 			}
-			
-			visited.remove(adjacent);
 		}
 		return targets;
 	}
@@ -62,10 +62,10 @@ public class IntBoard {//Test
 	public IntBoard(Set<BoardCell> myCells) {
 		super();
 		this.myCells = myCells;
-		calcAdjacencies();
 		for(BoardCell cell : this.myCells) {
 			grid[cell.getRow()][cell.getColumn()] = cell;
 		}
+		calcAdjacencies();
 	}
 	public BoardCell getCell(int row, int col) {
 		return grid[row][col];

@@ -115,7 +115,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 1);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(2, targets.size());
 		
 		assertTrue(targets.contains(board.getCell(0, 1)));
@@ -127,7 +127,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 2);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(3, targets.size());
 		
 		assertTrue(targets.contains(board.getCell(0, 2)));
@@ -140,7 +140,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 3);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(6, targets.size());
 		
 		//Valid for #3
@@ -158,7 +158,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 4);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(6, targets.size());
 		
 		//Valid for #4
@@ -176,7 +176,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 5);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(8, targets.size());
 
 		//Valid for #1	
@@ -198,7 +198,7 @@ class IntBoardTests {
 	{
 		BoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 6);
-		Set targets = board.getTargets();
+		Set<BoardCell> targets = board.getTargets();
 		assertEquals(7, targets.size());
 
 		//Valid for #6
