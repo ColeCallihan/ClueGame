@@ -1,0 +1,14 @@
+T, Trash Compactor, Card
+B, Bridge, Card
+A, Air Lock, Card
+L, Lounge, Card
+S, Sick Bay, Card
+P, Transporter Room, Card
+G, Generator Room, Card
+Q, Sleeping Quarters, Card
+H, Shield Generator, Card
+X, Closet, Other
+W, Walkway, Other
+
+
+

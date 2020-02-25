@@ -1,0 +1,7 @@
+Cole Callihan and Carter Pasqualini
+
+For our 4 tests, we decided to test the four doorways that open our lounge area. 
+This room has at least one doorway that opens to each direction, making it a simple way to check all 4 directions while staying located in the same general area.
+
+For the last test, we are testing the first cell in our first 3 rooms, and the last cell in the next 2 rooms.
+We included a walkway in between these rooms, and then the closet in the bottom right to make sure it is not a room.
