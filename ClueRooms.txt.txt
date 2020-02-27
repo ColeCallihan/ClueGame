@@ -9,6 +9,3 @@ Q, Sleeping Quarters, Card
 H, Shield Generator, Card
 X, Closet, Other
 W, Walkway, Other
-
-
-

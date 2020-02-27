@@ -6,32 +6,23 @@
 
 package clueGame;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class BadConfigFormatException extends Exception{
 
-	public BadConfigFormatException() {
-		super();
-		// TODO Auto-generated constructor stub
+	public BadConfigFormatException() throws FileNotFoundException {
+		super("Configuration files not formatted properly");
+		PrintWriter out = new PrintWriter("error_log.txt");
+		out.println("Configuration files not formatted properly");
+		out.close();
 	}
 
-	public BadConfigFormatException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-		// TODO Auto-generated constructor stub
-	}
-
-	public BadConfigFormatException(String message, Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
-	}
-
-	public BadConfigFormatException(String message) {
+	public BadConfigFormatException(String message) throws FileNotFoundException {
 		super(message);
-		// TODO Auto-generated constructor stub
-	}
-
-	public BadConfigFormatException(Throwable cause) {
-		super(cause);
-		// TODO Auto-generated constructor stub
+		PrintWriter out = new PrintWriter("error_log.txt");
+		out.println(message);
+		out.close();
 	}
 	
 }

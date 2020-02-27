@@ -10,6 +10,7 @@ public class BoardCell {
 	private int row;
 	private int column;
 	private char initial;
+	private DoorDirection doordir;
 	
 	/*
 	 * Constructor that sets the row and column of the BoardCell to zero by default
@@ -18,6 +19,7 @@ public class BoardCell {
 		super();
 		row = 0;
 		column = 0;
+		doordir = DoorDirection.NONE;
 	}
 
 	/*
@@ -27,6 +29,29 @@ public class BoardCell {
 		super();
 		this.row = row;
 		this.column = column;
+		doordir = DoorDirection.NONE;
+	}
+	
+	/*
+	 * Constructor that takes in row, column, and BoardCell letter
+	 */
+	public BoardCell(int row, int column, char initial) {
+		super();
+		this.row = row;
+		this.column = column;
+		this.initial = initial;
+		doordir = DoorDirection.NONE;
+	}
+	
+	/*
+	 * Constructor that also reads in door direction
+	 */
+	public BoardCell(int row, int column, char initial, DoorDirection doordir) {
+		super();
+		this.row = row;
+		this.column = column;
+		this.initial = initial;
+		this.doordir = doordir;
 	}
 
 	/*
@@ -45,24 +70,48 @@ public class BoardCell {
 	
 	//returns if this cell is a walkway or not as boolean
 	public boolean isWalkway() {
-		return false;
+		if(initial == 'W') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
+	
 	//returns if this cell is a room or not as boolean
 	public boolean isRoom() {
-		return false;
+		if(initial == 'W') {
+			return false;
+		}
+		else if (isDoorway()){
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
+	
 	//returns if this cell is a doorway or not as boolean
 	public boolean isDoorway() {
-		return false;
+		if(doordir == DoorDirection.NONE) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
-
+	
+	/*
+	 * returns the door direction of the cell
+	 */
 	public DoorDirection getDoorDirection() {
-		// TODO Auto-generated method stub
-		return null;
+		return doordir;
 	}
 
+	/*
+	 * returns the initial of the cell
+	 */
 	public char getInitial() {
-		// TODO Auto-generated method stub
 		return initial;
 	}
 }
