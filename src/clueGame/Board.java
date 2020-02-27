@@ -244,4 +244,19 @@ public class Board {
 	public BoardCell getCellAt(int i, int j) {
 		return board[i][j];
 	}
+
+	public Set<BoardCell> getAdjList(int i, int j) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void calcTargets(int i, int j, int k) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Set<BoardCell> getTargets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
