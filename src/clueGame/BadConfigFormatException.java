@@ -1,7 +1,7 @@
 /*
  * @authors Cole Callihan, Carter Pasqualini
  * 
- * exception for later use
+ * BadConfigFormatException is a custom exception that we design to output its corresponding error messages to a log file
  */ 
 
 package clueGame;
@@ -11,6 +11,9 @@ import java.io.PrintWriter;
 
 public class BadConfigFormatException extends Exception{
 
+	/*
+	 * Constructor that constructs a default Exception and writes the default message to the error log file
+	 */
 	public BadConfigFormatException() throws FileNotFoundException {
 		super("Configuration files not formatted properly");
 		PrintWriter out = new PrintWriter("error_log.txt");
@@ -18,6 +21,9 @@ public class BadConfigFormatException extends Exception{
 		out.close();
 	}
 
+	/*
+	 * Constructor that constructs the default exception with the passed in message and writes the message to the error log file
+	 */
 	public BadConfigFormatException(String message) throws FileNotFoundException {
 		super(message);
 		PrintWriter out = new PrintWriter("error_log.txt");
