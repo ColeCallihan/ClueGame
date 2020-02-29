@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.util.*;
 
 public class Board {
-	
+
 	private int numRows;//keeps track of the number of rows in the board
 	private int numColumns;//keeps track of the number of cols
 	public final int MAX_BOARD_SIZE = 50;
@@ -69,7 +69,7 @@ public class Board {
 		while(legendInfo.hasNextLine()) {
 			String currentRoom = legendInfo.nextLine();
 			String[] roomDetails = currentRoom.split(", ");//splits the file line entries into an array
-			
+
 			if(roomDetails[2].equals("Card") || roomDetails[2].equals("Other")) {//makes sure the room is a valid room
 				char letter = roomDetails[0].charAt(0);
 				legend.put(letter, roomDetails[1]);
@@ -173,23 +173,113 @@ public class Board {
 		Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
 		for(BoardCell currentCell : myCells) {
 			adjacentCellSet = new HashSet<BoardCell>();
-			//Cell above
-			if(currentCell.getRow() > 0) {
-				adjacentCellSet.add(board[currentCell.getRow() - 1][currentCell.getColumn()]);
-			}
-			//Cell below
-			if(currentCell.getRow() < 3) {
-				adjacentCellSet.add(board[currentCell.getRow() + 1][currentCell.getColumn()]);
-			}
-			//Cell left
-			if(currentCell.getColumn() > 0) {
-				adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() - 1]);
-			}
-			//Cell right
-			if(currentCell.getColumn() < 3) {
-				adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() + 1]);
-			}
+			if(currentCell.isDoorway() || currentCell.isWalkway()) {//Tests to make sure cell is not a room cell
+				if(currentCell.isDoorway()) {
+					DoorDirection currentDirection = currentCell.getDoorDirection();
 
+					if(currentDirection == DoorDirection.UP) {
+						//Cell above
+						if(currentCell.getRow() > 0) {
+							if(board[currentCell.getRow() - 1][currentCell.getColumn()].isWalkway()) {
+								adjacentCellSet.add(board[currentCell.getRow() - 1][currentCell.getColumn()]);
+							}
+							else if(board[currentCell.getRow() - 1][currentCell.getColumn()].isDoorway()) {
+								if(board[currentCell.getRow() - 1][currentCell.getColumn()].getDoorDirection() == DoorDirection.DOWN) {
+									adjacentCellSet.add(board[currentCell.getRow() - 1][currentCell.getColumn()]);
+								}
+							}
+						}
+					}
+					else if(currentDirection == DoorDirection.DOWN) {
+						//Cell below
+						if(currentCell.getRow() < (numRows - 1)) {
+							if(board[currentCell.getRow() + 1][currentCell.getColumn()].isWalkway()) {
+								adjacentCellSet.add(board[currentCell.getRow() + 1][currentCell.getColumn()]);
+							}
+							else if(board[currentCell.getRow() + 1][currentCell.getColumn()].isDoorway()) {
+								if(board[currentCell.getRow() + 1][currentCell.getColumn()].getDoorDirection() == DoorDirection.UP) {
+									adjacentCellSet.add(board[currentCell.getRow() + 1][currentCell.getColumn()]);
+								}
+							}
+						}
+					}
+					else if(currentDirection == DoorDirection.LEFT) {
+						//Cell left
+						if(currentCell.getColumn() > 0) {
+							if(board[currentCell.getRow()][currentCell.getColumn() - 1].isWalkway()) {
+								adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() - 1]);
+							}
+							else if(board[currentCell.getRow()][currentCell.getColumn() - 1].isDoorway()) {
+								if(board[currentCell.getRow()][currentCell.getColumn() - 1].getDoorDirection() == DoorDirection.RIGHT) {
+									adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() - 1]);
+								}
+							}
+						}
+					}
+					else if(currentDirection == DoorDirection.RIGHT){
+						//Cell right
+						if(currentCell.getColumn() < (numColumns- 1)) {
+							if(board[currentCell.getRow()][currentCell.getColumn() + 1].isWalkway()) {
+								adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() + 1]);
+							}
+							else if(board[currentCell.getRow()][currentCell.getColumn() + 1].isDoorway()) {
+								if(board[currentCell.getRow()][currentCell.getColumn() + 1].getDoorDirection() == DoorDirection.LEFT) {
+									adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() + 1]);
+								}
+							}
+						}
+					}
+					adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+				}
+				else {
+					//Cell above
+					if(currentCell.getRow() > 0) {
+						if(board[currentCell.getRow() - 1][currentCell.getColumn()].isWalkway()) {
+							adjacentCellSet.add(board[currentCell.getRow() - 1][currentCell.getColumn()]);
+						}
+						else if(board[currentCell.getRow() - 1][currentCell.getColumn()].isDoorway()) {
+							if(board[currentCell.getRow() - 1][currentCell.getColumn()].getDoorDirection() == DoorDirection.DOWN) {
+								adjacentCellSet.add(board[currentCell.getRow() - 1][currentCell.getColumn()]);
+							}
+						}
+					}
+					//Cell below
+					if(currentCell.getRow() < (numRows - 1)) {
+						if(board[currentCell.getRow() + 1][currentCell.getColumn()].isWalkway()) {
+							adjacentCellSet.add(board[currentCell.getRow() + 1][currentCell.getColumn()]);
+						}
+						else if(board[currentCell.getRow() + 1][currentCell.getColumn()].isDoorway()) {
+							if(board[currentCell.getRow() + 1][currentCell.getColumn()].getDoorDirection() == DoorDirection.UP) {
+								adjacentCellSet.add(board[currentCell.getRow() + 1][currentCell.getColumn()]);
+							}
+						}
+					}
+					//Cell left
+					if(currentCell.getColumn() > 0) {
+						if(board[currentCell.getRow()][currentCell.getColumn() - 1].isWalkway()) {
+							adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() - 1]);
+						}
+						else if(board[currentCell.getRow()][currentCell.getColumn() - 1].isDoorway()) {
+							if(board[currentCell.getRow()][currentCell.getColumn() - 1].getDoorDirection() == DoorDirection.RIGHT) {
+								adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() - 1]);
+							}
+						}
+					}
+					//Cell right
+					if(currentCell.getColumn() < (numColumns- 1)) {
+						if(board[currentCell.getRow()][currentCell.getColumn() + 1].isWalkway()) {
+							adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() + 1]);
+						}
+						else if(board[currentCell.getRow()][currentCell.getColumn() + 1].isDoorway()) {
+							if(board[currentCell.getRow()][currentCell.getColumn() + 1].getDoorDirection() == DoorDirection.LEFT) {
+								adjacentCellSet.add(board[currentCell.getRow()][currentCell.getColumn() + 1]);
+							}
+						}
+					}
+
+					adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+				}
+			}
 			adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
 		}
 	}
@@ -212,7 +302,7 @@ public class Board {
 		for(BoardCell adjacent : getAdjList(thisCell)) {
 			if(visited.contains(adjacent) != true) {//If the cell has not been visited before, check to see if it is a target
 				visited.add(adjacent);
-				if(numSteps == 1) {//If it is on the last step, add the adjacent tile to the target set
+				if(numSteps == 1 || adjacent.isDoorway()) {//If it is on the last step, add the adjacent tile to the target set
 					targets.add(adjacent);
 				}
 				else {
@@ -267,18 +357,18 @@ public class Board {
 		return board[i][j];
 	}
 
+	/*
+	 * Returns the adjacency list
+	 */
 	public Set<BoardCell> getAdjList(int i, int j) {
-		// TODO Auto-generated method stub
-		return null;
+		return adjMatrix.get(getCellAt(i, j));
 	}
 
 	public void calcTargets(int i, int j, int k) {
-		// TODO Auto-generated method stub
-		
+		calcTargets(getCellAt(i, j), k);
 	}
 
 	public Set<BoardCell> getTargets() {
-		// TODO Auto-generated method stub
-		return null;
+		return targets;
 	}
 }

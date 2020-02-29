@@ -80,7 +80,7 @@ public class Modified_BoardAdjTargetTests {
 		//TEST DOORWAY RIGHT, WHERE THERE'S A WALKWAY ABOVE
 		testList = board.getAdjList(23, 8);
 		assertEquals(1, testList.size());
-		assertTrue(testList.contains(board.getCellAt(22, 8)));
+		assertTrue(testList.contains(board.getCellAt(23, 9)));
 		
 	}
 	
@@ -105,7 +105,7 @@ public class Modified_BoardAdjTargetTests {
 		// Test beside a door direction UP
 		testList = board.getAdjList(9, 15);
 		assertTrue(testList.contains(board.getCellAt(9, 16)));
-		assertTrue(testList.contains(board.getCellAt(9, 4)));
+		assertTrue(testList.contains(board.getCellAt(9, 14)));
 		assertTrue(testList.contains(board.getCellAt(8, 15)));
 		assertTrue(testList.contains(board.getCellAt(10, 15)));
 		assertEquals(4, testList.size());
@@ -224,7 +224,7 @@ public class Modified_BoardAdjTargetTests {
 		assertTrue(targets.contains(board.getCellAt(22, 1)));
 		
 		// Includes a path that doesn't have enough length
-		board.calcTargets(14, 0, 4);
+		board.calcTargets(28, 9, 4);
 		targets= board.getTargets();
 		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCellAt(25, 10)));
@@ -284,7 +284,7 @@ public class Modified_BoardAdjTargetTests {
 	{
 		board.calcTargets(17, 8, 3);
 		Set<BoardCell> targets= board.getTargets();
-		assertEquals(12, targets.size());
+		assertEquals(11, targets.size());
 		// directly up and down
 		assertTrue(targets.contains(board.getCellAt(14, 8)));
 		assertTrue(targets.contains(board.getCellAt(20, 8)));
