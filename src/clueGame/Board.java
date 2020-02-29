@@ -174,7 +174,7 @@ public class Board {
 		for(BoardCell currentCell : myCells) {
 			adjacentCellSet = new HashSet<BoardCell>();
 			if(currentCell.isDoorway() || currentCell.isWalkway()) {//Tests to make sure cell is not a room cell
-				if(currentCell.isDoorway()) {
+				if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
 					DoorDirection currentDirection = currentCell.getDoorDirection();
 
 					if(currentDirection == DoorDirection.UP) {
@@ -231,7 +231,7 @@ public class Board {
 					}
 					adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
 				}
-				else {
+				else {//it is a normal walkway cell
 					//Cell above
 					if(currentCell.getRow() > 0) {
 						if(board[currentCell.getRow() - 1][currentCell.getColumn()].isWalkway()) {
@@ -280,6 +280,8 @@ public class Board {
 					adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
 				}
 			}
+			//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+			//If it wasn't a room, it is just re-added to the map, not changing any values
 			adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
 		}
 	}
@@ -364,10 +366,16 @@ public class Board {
 		return adjMatrix.get(getCellAt(i, j));
 	}
 
+	/*
+	 * Calculates the targets corresponding to the cell at row i, column j, and moves k
+	 */
 	public void calcTargets(int i, int j, int k) {
 		calcTargets(getCellAt(i, j), k);
 	}
 
+	/*
+	 * returns the set of targets corresponding to the last calcTargets cell
+	 */
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
