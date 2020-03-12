@@ -1,0 +1,199 @@
+/*
+* @author Cole Callihan, Carter Pasqualini
+* Before and after of calcAdjacencies formatting
+*/
+
+/* BEFORE
+ * Sets the adjacency matrix by calculating BoardCells that are adjacent to each BoardCell
+ */
+public void calcAdjacencies() {
+	Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+	for(BoardCell currentCell : myCells) {
+		adjacentCellSet = new HashSet<BoardCell>();
+		if(currentCell.isDoorway() || currentCell.isWalkway()) {//Tests to make sure cell is not a room cell
+			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+					// Didn't change body
+
+				}
+			else {//it is a normal walkway cell
+					//Didn't change body
+				}
+
+				adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+			}
+		}
+		//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+		//If it wasn't a room, it is just re-added to the map, not changing any values
+		adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+	}
+}
+
+
+
+//AFTER
+	/*
+	 * Sets the adjacency matrix by calculating BoardCells that are adjacent to each BoardCell
+	 */
+	public void calcAdjacencies() {
+		Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+		for(BoardCell currentCell : myCells) {
+			adjacentCellSet = new HashSet<BoardCell>();
+			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+				 //Didn't change body
+			}
+			else if (currentCell.isWalkway()) {//it is a normal walkway cell
+				//Didn't change body
+			}
+			//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+			//If it wasn't a room, it is just re-added to the map, not changing any values
+			adjMatrix.put(currentCell, adjacentCellSet);
+		}
+	}
+
+
+GIT LOG:
+
+commit 54dc948920f750836f92c6cba3cd03642af87e62
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 21:36:06 2020 -0600
+
+    Reformatted load board by extracting a method to create board cells and add them to maps and lists
+
+commit 37c4f9d70ceeb254342d8aabc544304723643f0b
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Wed Mar 11 21:06:12 2020 -0600
+
+    Moved Comments to be more clear in what they are referencing
+
+commit 934f1c4daac38dc8376d30b14466dc8c9824b762
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 20:59:47 2020 -0600
+
+    Reformatted calcAdjacencies to have less redundant code and added difference file
+
+commit 550a7961a0b1b5e4ba0af213827da7ee4d25b3cf
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 20:44:14 2020 -0600
+
+    Moved char variable instantiation outside of loop in load board
+
+commit 3a006ef4dc3099cf3c44f2b01d9b0de967d23a60
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Wed Mar 11 20:40:36 2020 -0600
+
+    Added error message in try/catch block
+
+commit a1a78bc148287dc27c77a20589d49f523c851c29
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Wed Mar 11 20:38:15 2020 -0600
+
+    Fixed board private contructor/removed comments
+
+commit d4eb5a304ff2ba6f51c1190b76ff1987d085f9a8
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 20:35:45 2020 -0600
+
+    Moved comments on board instance variables above their lines
+
+commit 7bd5048e36a4895dd4b9025ea44dcf2f39019b37
+Merge: b23303a 9ac3d6e
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 20:28:32 2020 -0600
+
+    Merge branch 'master' of https://github.com/ColeCallihan/ClueGame
+
+commit 9ac3d6ed8ecf55bc496a639d0afd1a250477caed
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Wed Mar 11 20:25:56 2020 -0600
+
+    Fixed top comment with names and purpose of class
+
+commit b23303a786de9f860a7e7d421ca07f528d2bfe7c
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sat Feb 29 16:57:19 2020 -0700
+
+    Added comments for part 4
+
+commit 3fa5be15a3b5e998709338764f6d6cb456fe257f
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sat Feb 29 16:45:51 2020 -0700
+
+    Finished part 4
+
+commit 0a02652cde69b732e0971153f407db5b38962004
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Sat Feb 29 15:50:01 2020 -0700
+
+    Finished part 3
+
+commit 15e19de8d7cfada7e5d6bfe16d23da3276ce5697
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Thu Feb 27 22:30:32 2020 -0700
+
+    Added comments to part 2 files and moved tests into data package
+
+commit bba4f55c95bc3418dac0a2d8a392a8d909f2b589
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Thu Feb 27 13:42:38 2020 -0700
+
+    Partway done with part 3, saving so we don't lose it
+
+commit 084eda9fbaf2f971258b28e78b059edd18f8ae3c
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Thu Feb 27 12:48:45 2020 -0700
+
+    Finished Part 2 including the Extra Credit
+
+commit a926adc5787acbc09c0658e7cdaf529149af570f
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Thu Feb 27 12:36:18 2020 -0700
+
+    Moving some files around/Testing
+
+commit 880fc5ad1a0b5eab153f995e4f1a3895a171b763
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Tue Feb 25 13:47:31 2020 -0700
+
+    Finished with part 1 for today with failing tests
+
+commit 6f284549b3bc8bcb77968dc99a70003bf62079ee
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Feb 21 21:27:50 2020 -0700
+
+    Added comments to BoardCell, IntBoard, and IntBoardTests
+
+commit 0a091e80b936fe47dad3ce3f2749e723e312c06f
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Feb 21 20:32:51 2020 -0700
+
+    Fixed bugs so all of the tests pass for calculating adjacency and targets
+
+commit 5edc0acd0431758a2a8bbc303d5d56f2de099a40
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Feb 21 19:47:48 2020 -0700
+
+    Actual upload of methods definitions and still experiencing testing errors
+
+commit 59b5aa4a84196ad0ec2b2572ca8324199f631ca2
+Author: cbpasqualini <60121540+cbpasqualini@users.noreply.github.com>
+Date:   Fri Feb 21 19:02:34 2020 -0700
+
+    Add files via upload
+
+commit b35a67153c8d3295b0c9900cdadf497da7d8c7ef
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Fri Feb 21 17:26:48 2020 -0700
+
+    Wrote tests for Part 1, and it is complete
+
+commit fa2038108bc63913af6e70c5ff363e41deb6884f
+Author: Cole Callihan <cacallihan@mymail.mines.edu>
+Date:   Thu Feb 20 13:26:20 2020 -0700
+
+    Adding .gitignore to the project
+
+commit 467518ec00ce3cfe5a6eb0086d91315c623f242c
+Author: Cole Callihan <cacallihan@mymail.mines.edu>
+Date:   Thu Feb 20 13:23:59 2020 -0700
+
+    Initial Creation of repository
