@@ -73,7 +73,7 @@ public class Board {
 		FileReader inRoom = new FileReader(roomConfigFile);
 		Scanner legendInfo = new Scanner(inRoom);
 
-		char letter = '';
+		char letter = ' ';
 		while(legendInfo.hasNextLine()) {
 			String currentRoom = legendInfo.nextLine();
 			String[] roomDetails = currentRoom.split(", ");//splits the file line entries into an array
@@ -95,10 +95,10 @@ public class Board {
 		FileReader inputFileForCalc = new FileReader(boardConfigFile);
 		Scanner rowColBoard = new Scanner(inputFileForCalc);
 
-
 		int calcRows = 0;
 		int calcCols = 0;
-		while(rowColBoard.hasNextLine()) {//reads through the file to figure out how many columns and rows there are to instantiate the board 2D array
+		//reads through the file to figure out how many columns and rows there are to instantiate the board 2D array
+		while(rowColBoard.hasNextLine()) {
 			calcRows++;
 
 			String currentRow = rowColBoard.nextLine();
@@ -110,13 +110,15 @@ public class Board {
 		board = new BoardCell[calcRows][calcCols];
 		numRows = calcRows;
 		numColumns = calcCols;
-
-		FileReader inputFile = new FileReader(boardConfigFile);//resets the file reader
+		
+		//resets the file reader
+		FileReader inputFile = new FileReader(boardConfigFile);
 		Scanner inBoard = new Scanner(inputFile);
 
+		//iterates through the board .csv and adds a BoardCell to the board for each cell label
 		int rows = 0;
 		int numColsFirstRow = 0;
-		while(inBoard.hasNextLine()) {//iterates through the board .csv and adds a BoardCell to the board for each cell label
+		while(inBoard.hasNextLine()) {
 			String currentRow = inBoard.nextLine();
 			String[] rowLayout = currentRow.split(",");
 
@@ -125,11 +127,14 @@ public class Board {
 			}
 
 			for(int i = 0; i < rowLayout.length; i++) {
-				if(rowLayout.length != numColsFirstRow) {//if the current row is not equal to the number of rows in the beginning, throws error back up to initialize
+				//if the current row is not equal to the number of rows in the beginning, throws error back up to initialize
+				if(rowLayout.length != numColsFirstRow) {
 					throw new BadConfigFormatException("Incorrect number of columns in row " + ++rows);
-				}				
-				else if(legend.containsKey(rowLayout[i].charAt(0))) {//otherwise if the row is valid and it has a label
-					if(rowLayout[i].length() == 2) {//if the label has a door direction attached
+				}		
+				//otherwise if the row is valid and it has a label
+				else if(legend.containsKey(rowLayout[i].charAt(0))) {
+					//if the label has a door direction attached
+					if(rowLayout[i].length() == 2) {
 						switch(rowLayout[i].charAt(1)) {
 						case 'D':
 							BoardCell currentCell = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.DOWN);
@@ -151,26 +156,29 @@ public class Board {
 							board[rows][i] = currentCell3;
 							myCells.add(currentCell3);
 							break;
-						default://the door direction is not a direction, meaning it is N, ignore it
+						default:
+							//the door direction is not a direction, meaning it is N, ignore it
 							BoardCell currentCell4 = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.NONE);
 							board[rows][i] = currentCell4;
 							myCells.add(currentCell4);
 						}
 					}
-					else {//adds the normal BoardCell to the board
+					//adds the normal BoardCell to the board
+					else {
 						BoardCell currentCell = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.NONE);
 						board[rows][i] = currentCell;
 						myCells.add(currentCell);
 					}
 					numColumns = i + 1;
 				}
-				else {//else the room type was not in the legend, so throw an error
+				//else the room type was not in the legend, so throw an error
+				else {
 					throw new BadConfigFormatException("Room not in legend");
 				}
 			}
-
+			//instantiate the total number of rows in the board
 			rows++;
-			numRows = rows;//instantiate the total number of rows in the board
+			numRows = rows;
 		}
 	}
 
@@ -178,10 +186,12 @@ public class Board {
 	 * Sets the adjacency matrix by calculating BoardCells that are adjacent to each BoardCell
 	 */
 	public void calcAdjacencies() {
-		Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+		//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+		Set<BoardCell> adjacentCellSet;
 		for(BoardCell currentCell : myCells) {
 			adjacentCellSet = new HashSet<BoardCell>();
-			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+			//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+			if(currentCell.isDoorway()) {
 				DoorDirection currentDirection = currentCell.getDoorDirection();
 
 				if(currentDirection == DoorDirection.UP) {
@@ -236,9 +246,9 @@ public class Board {
 						}
 					}
 				}
-				adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
 			}
-			else if (currentCell.isWalkWay()) {//it is a normal walkway cell
+			//it is a normal walkway cell
+			else if (currentCell.isWalkway()) {
 				//Cell above
 				if(currentCell.getRow() > 0) {
 					if(board[currentCell.getRow() - 1][currentCell.getColumn()].isWalkway()) {
@@ -284,10 +294,10 @@ public class Board {
 					}
 				}
 			}
+			//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+			//If it wasn't a room, it is just re-added to the map, not changing any values
+			adjMatrix.put(currentCell, adjacentCellSet);
 		}
-		//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
-		//If it wasn't a room, it is just re-added to the map, not changing any values
-		adjMatrix.put(currentCell, adjacentCellSet);
 	}
 
 	/*
@@ -306,18 +316,23 @@ public class Board {
 	 */
 	public Set<BoardCell> findAllTargets(BoardCell thisCell, int numSteps){
 		for(BoardCell adjacent : getAdjList(thisCell)) {
-			if(visited.contains(adjacent) != true) {//If the cell has not been visited before, check to see if it is a target
+			//If the cell has not been visited before, check to see if it is a target
+			if(visited.contains(adjacent) != true) {
 				visited.add(adjacent);
-				if(numSteps == 1 || adjacent.isDoorway()) {//If it is on the last step, add the adjacent tile to the target set
+				//If it is on the last step, add the adjacent tile to the target set
+				if(numSteps == 1 || adjacent.isDoorway()) {
 					targets.add(adjacent);
 				}
 				else {
-					findAllTargets(adjacent, numSteps - 1);//check the adjacent tiles from that adjacent tile with one less step
+					findAllTargets(adjacent, numSteps - 1);
+					//check the adjacent tiles from that adjacent tile with one less step
 				}
-				visited.remove(adjacent);//remove the current adjacent tile because it was only a temporary step
+				visited.remove(adjacent);
+				//remove the current adjacent tile because it was only a temporary step
 			}
 		}
-		return targets;//returns the target list/set
+		return targets;
+		//returns the target list/set
 	}
 
 	/*

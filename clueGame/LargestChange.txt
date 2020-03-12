@@ -41,11 +41,11 @@ public void calcAdjacencies() {
 			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
 				 //Didn't change body
 			}
-			else if (currentCell.isWalkWay()) {//it is a normal walkway cell
+			else if (currentCell.isWalkway()) {//it is a normal walkway cell
 				//Didn't change body
 			}
+			//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+			//If it wasn't a room, it is just re-added to the map, not changing any values
+			adjMatrix.put(currentCell, adjacentCellSet);
 		}
-		//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
-		//If it wasn't a room, it is just re-added to the map, not changing any values
-		adjMatrix.put(currentCell, adjacentCellSet);
 	}
