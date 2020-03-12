@@ -1,0 +1,51 @@
+/*
+* @author Cole Callihan, Carter Pasqualini
+* Before and after of calcAdjacencies formatting
+*/
+
+/* BEFORE
+ * Sets the adjacency matrix by calculating BoardCells that are adjacent to each BoardCell
+ */
+public void calcAdjacencies() {
+	Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+	for(BoardCell currentCell : myCells) {
+		adjacentCellSet = new HashSet<BoardCell>();
+		if(currentCell.isDoorway() || currentCell.isWalkway()) {//Tests to make sure cell is not a room cell
+			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+					// Didn't change body
+
+				}
+			else {//it is a normal walkway cell
+					//Didn't change body
+				}
+
+				adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+			}
+		}
+		//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+		//If it wasn't a room, it is just re-added to the map, not changing any values
+		adjMatrix.put(currentCell, adjacentCellSet);//Adds the adjacency list and the current cell to the adjacency map
+	}
+}
+
+
+
+//AFTER
+	/*
+	 * Sets the adjacency matrix by calculating BoardCells that are adjacent to each BoardCell
+	 */
+	public void calcAdjacencies() {
+		Set<BoardCell> adjacentCellSet;//Creates uninstantiated set to hold the current BoardCell's adjacent cells
+		for(BoardCell currentCell : myCells) {
+			adjacentCellSet = new HashSet<BoardCell>();
+			if(currentCell.isDoorway()) {//If the cell is a doorway, it needs to only test adjacencies to the cell corresponding to the door direction of the door
+				 //Didn't change body
+			}
+			else if (currentCell.isWalkWay()) {//it is a normal walkway cell
+				//Didn't change body
+			}
+		}
+		//Adds the current adjacency set to the adjacency matrix in case the cell was a room and it has no adjacencies
+		//If it wasn't a room, it is just re-added to the map, not changing any values
+		adjMatrix.put(currentCell, adjacentCellSet);
+	}
