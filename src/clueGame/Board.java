@@ -137,37 +137,25 @@ public class Board {
 					if(rowLayout[i].length() == 2) {
 						switch(rowLayout[i].charAt(1)) {
 						case 'D':
-							BoardCell currentCell = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.DOWN);
-							board[rows][i] = currentCell;
-							myCells.add(currentCell);
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.DOWN);
 							break;
 						case 'U':
-							BoardCell currentCell1 = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.UP);
-							board[rows][i] = currentCell1;
-							myCells.add(currentCell1);
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.UP);
 							break;
 						case 'R':
-							BoardCell currentCell2 = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.RIGHT);
-							board[rows][i] = currentCell2;
-							myCells.add(currentCell2);
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.RIGHT);
 							break;
 						case 'L':
-							BoardCell currentCell3 = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.LEFT);
-							board[rows][i] = currentCell3;
-							myCells.add(currentCell3);
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.LEFT);
 							break;
 						default:
 							//the door direction is not a direction, meaning it is N, ignore it
-							BoardCell currentCell4 = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.NONE);
-							board[rows][i] = currentCell4;
-							myCells.add(currentCell4);
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.NONE);
 						}
 					}
 					//adds the normal BoardCell to the board
 					else {
-						BoardCell currentCell = new BoardCell(rows, i, rowLayout[i].charAt(0), DoorDirection.NONE);
-						board[rows][i] = currentCell;
-						myCells.add(currentCell);
+						createCellAddToMap(rows, rowLayout, i, DoorDirection.NONE);
 					}
 					numColumns = i + 1;
 				}
@@ -180,6 +168,15 @@ public class Board {
 			rows++;
 			numRows = rows;
 		}
+	}
+
+	/*
+	 * Creates a cell with the given parameters and adds it to the list of cells and the board
+	 */
+	public void createCellAddToMap(int rows, String[] rowLayout, int i, DoorDirection direction) {
+		BoardCell currentCell = new BoardCell(rows, i, rowLayout[i].charAt(0), direction);
+		board[rows][i] = currentCell;
+		myCells.add(currentCell);
 	}
 
 	/*
@@ -346,8 +343,8 @@ public class Board {
 	 * Sets config file names to the names passed in
 	 */
 	public void setConfigFiles(String string, String string2){
-		boardConfigFile = "./data/" + string;
-		roomConfigFile = "./data/" + string2;
+		boardConfigFile = "./src/data/" + string;
+		roomConfigFile = "./src/data/" + string2;
 	}
 
 	/*
