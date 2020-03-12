@@ -1,5 +1,5 @@
 /*
- * @authors Cole Callihan, Carter Pasqualini
+ * @author Cole Callihan, Carter Pasqualini
  * 
  * BoardCell class defines the cells that make up the board, and the specific row and column they lie in
  */

@@ -1,6 +1,7 @@
 package tests;
 
 /*
+ * 
  * This program tests that adjacencies and targets are calculated correctly.
  */
 

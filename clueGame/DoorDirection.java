@@ -1,5 +1,5 @@
 /*
- * @authors Cole Callihan, Carter Pasqualini
+ * @author Cole Callihan, Carter Pasqualini
  * 
  * enum to help with possible door directions
  */ 
