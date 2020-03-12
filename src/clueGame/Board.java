@@ -11,17 +11,26 @@ import java.util.*;
 
 public class Board {
 
-	private int numRows;//keeps track of the number of rows in the board
-	private int numColumns;//keeps track of the number of cols
+	//instance variables for integers that keep track of the board columns, rows, and max board size
+	private int numRows;
+	private int numColumns;
 	public final int MAX_BOARD_SIZE = 50;
-	private BoardCell[][] board;//initial 2D array of BoardCells
-	private Map<Character, String> legend = new HashMap<Character, String>();//Instantiates the legend map
-	private Map<BoardCell, Set<BoardCell>> adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();//instantiates the adjacent matrix map
-	private Set<BoardCell> myCells = new HashSet<BoardCell>();//instantiates the set containing all of the BoardCells
-	private Set<BoardCell> visited = new HashSet<BoardCell>();//instantiates the set containing visited cells for calc adjacencies
-	private Set<BoardCell> targets = new HashSet<BoardCell>();//instantiates the set containing the target cells for calc targets
-	private String boardConfigFile;//name of board file to read in
-	private String roomConfigFile;//name of room/legend file to read in
+	
+	//initial 2D array of BoardCells
+	private BoardCell[][] board;
+	
+	//Instantiates the legend map and the adjacent matrix map
+	private Map<Character, String> legend = new HashMap<Character, String>();
+	private Map<BoardCell, Set<BoardCell>> adjMatrix = new HashMap<BoardCell, Set<BoardCell>>();
+	
+	//instantiates the set containing all of the BoardCells, the set containing visited cells for calc adjacencies and the set containing the target cells for calc targets
+	private Set<BoardCell> myCells = new HashSet<BoardCell>();
+	private Set<BoardCell> visited = new HashSet<BoardCell>();
+	private Set<BoardCell> targets = new HashSet<BoardCell>();
+	
+	//name of board file to read in and of room/legend file to read in
+	private String boardConfigFile;
+	private String roomConfigFile;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();

@@ -6,6 +6,7 @@
 package clueGame;
 
 public class BoardCell {
+	
 	//instance variables to define the position, row and column, of the BoardCell
 	private int row;
 	private int column;
