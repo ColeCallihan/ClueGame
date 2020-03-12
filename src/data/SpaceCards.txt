@@ -1,0 +1,26 @@
+PEOPLE
+Spock
+Android
+Alien
+Tourist
+Engineer
+Captain
+
+WEAPONS
+Freeze Gun
+Face Hugger
+Probe
+Lazer
+FlameThrower
+Scapel
+
+ROOMS
+Trash Compactor
+Bridge
+Air Lock
+Lounge
+Sick Bay
+Transporter Room
+Generator Room
+Sleeping Quarters
+Shield Generator
