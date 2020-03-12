@@ -38,10 +38,6 @@ public class Board {
 	// constructor is private to ensure only one can be created
 	private Board() {
 		super();
-
-		//initialize();
-		//calcAdjacencies();
-
 	}
 
 	/*
@@ -61,9 +57,11 @@ public class Board {
 			loadBoardConfig();
 
 		}catch(BadConfigFormatException e) {
-
+			
+			System.out.println(e);
 		}catch(FileNotFoundException e) {
-
+			
+			System.out.println(e);
 		}
 		calcAdjacencies();
 	}
