@@ -73,12 +73,13 @@ public class Board {
 		FileReader inRoom = new FileReader(roomConfigFile);
 		Scanner legendInfo = new Scanner(inRoom);
 
+		char letter = '';
 		while(legendInfo.hasNextLine()) {
 			String currentRoom = legendInfo.nextLine();
 			String[] roomDetails = currentRoom.split(", ");//splits the file line entries into an array
 
 			if(roomDetails[2].equals("Card") || roomDetails[2].equals("Other")) {//makes sure the room is a valid room
-				char letter = roomDetails[0].charAt(0);
+				letter = roomDetails[0].charAt(0);
 				legend.put(letter, roomDetails[1]);
 			}
 			else {
