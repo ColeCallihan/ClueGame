@@ -1,5 +1,5 @@
 /*
- * @authors Cole Callihan, Carter Pasqualini
+ * @author Cole Callihan, Carter Pasqualini
  * 
  * Board class to instantiate all aspects of the board
  */ 

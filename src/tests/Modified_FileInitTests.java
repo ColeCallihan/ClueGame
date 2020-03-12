@@ -2,8 +2,6 @@ package tests;
 
 /*
  * @authors Cole Callihan, Carter Pasqualini
- * 
- * 
  *
  * This program tests that config files are loaded properly.
  */

@@ -1,5 +1,5 @@
 /*
- * @authors Cole Callihan, Carter Pasqualini
+ * @author Cole Callihan, Carter Pasqualini
  * 
  * BadConfigFormatException is a custom exception that we design to output its corresponding error messages to a log file
  */ 

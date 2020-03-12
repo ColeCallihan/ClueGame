@@ -1,6 +1,8 @@
 package tests;
-//Cole Callihan and Carter Pasqualini
+
 /*
+ * @author Cole Callihan, Carter Pasqualini
+ * 
  * This program tests that adjacencies and targets are calculated correctly.
  */
 
