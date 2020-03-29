@@ -37,7 +37,6 @@ public class gameSetupTests {
 
 	@BeforeAll
 	public static void setUp() throws FileNotFoundException, BadConfigFormatException{
-		System.out.println("Test");
 		board = Board.getInstance();
 		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");
 
@@ -56,8 +55,6 @@ public class gameSetupTests {
 
 	@Test
 	public void testPeopleLoading() {
-		System.out.println("Test");
-
 		//Checking Human Player in first position
 		Color currentColor = convertColor("Blue");
 		assertEquals(6, allPlayers.size());

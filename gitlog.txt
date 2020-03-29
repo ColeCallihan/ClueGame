@@ -1,3 +1,45 @@
+commit 59211d076422d8c1d8e6e8889c1c6ff6bc261cf9
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sun Mar 29 01:24:17 2020 -0600
+
+    Finalized C18A Part 1 and wrote comments
+
+commit ad9b25ede98796a66048f1af3da18e2006ab50ab
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sun Mar 29 00:26:59 2020 -0600
+
+    Worked more on defining player tests in part 1, still errors, added a main method test
+
+commit 7b0a7e1130d9504b62ace1cadbd39d78fce6d470
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sat Mar 28 23:09:11 2020 -0600
+
+    Completed filling out player classes and card deck interactions, still have errors with test passing
+
+commit 583560d75d0c444afb573690c22709199c7a87b4
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Sat Mar 28 20:56:33 2020 -0600
+
+    Finished tests for Clue Player Part 1
+
+commit 461121deb4fe5c9c19e3eecfe9a0721442677bfd
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Thu Mar 12 13:44:52 2020 -0600
+
+    Completed about half of tests for players and cards
+
+commit 8ac08384a54de9ec8b78f3910751425fd26e25a9
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 21:40:24 2020 -0600
+
+    Moved all submitted txt files into a folder
+
+commit 6e6e547baf7ef017aede621119cc555fc730c4df
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Mar 11 21:36:45 2020 -0600
+
+    Git log file for C17A2
+
 commit 54dc948920f750836f92c6cba3cd03642af87e62
 Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
 Date:   Wed Mar 11 21:36:06 2020 -0600
