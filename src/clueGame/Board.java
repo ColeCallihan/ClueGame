@@ -5,6 +5,8 @@
  */ 
 package clueGame;
 
+import java.awt.Color;
+import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
@@ -15,6 +17,13 @@ public class Board {
 	private int numRows;
 	private int numColumns;
 	public final int MAX_BOARD_SIZE = 50;
+
+	//instance variables of lists of players and cards
+	private ArrayList<Player> players;
+	private ArrayList<Card> deck;
+	private ArrayList<Card> playerCards;
+	private ArrayList<Card> weaponCards;
+	private ArrayList<Card> roomCards;
 
 	//initial 2D array of BoardCells
 	private BoardCell[][] board;
@@ -31,6 +40,8 @@ public class Board {
 	//name of board file to read in and of room/legend file to read in
 	private String boardConfigFile;
 	private String roomConfigFile;
+	private String playerConfigFile;
+	private String cardConfigFile;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -110,7 +121,7 @@ public class Board {
 		board = new BoardCell[calcRows][calcCols];
 		numRows = calcRows;
 		numColumns = calcCols;
-		
+
 		//resets the file reader
 		FileReader inputFile = new FileReader(boardConfigFile);
 		Scanner inBoard = new Scanner(inputFile);
@@ -394,6 +405,164 @@ public class Board {
 	 */
 	public Set<BoardCell> getTargets() {
 		return targets;
+	}
+
+	/*
+	 * Sets the config files to the corresponding file names
+	 */
+	public void setConfigFiles(String string, String string2, String string3, String string4) {
+		boardConfigFile = "./src/data/" + string;
+		roomConfigFile = "./src/data/" + string2;
+		playerConfigFile = "./src/data/" + string3;
+		cardConfigFile = "./src/data/" + string4;
+	}
+
+	/*
+	 * Reads in the board people file and creates new players to send to the board's list of players
+	 */
+	public void loadPeople() throws FileNotFoundException{
+		System.out.println("Help me!");
+		FileReader inPlayers = new FileReader(playerConfigFile);
+		Scanner playerInfo = new Scanner(inPlayers);
+
+		while(playerInfo.hasNextLine()) {
+			String currentPlayer = playerInfo.nextLine();
+			String[] playerDetails = currentPlayer.split(", ");//splits the file line entries into an array
+
+			String playerName = playerDetails[0];
+			Color playerColor = convertColor(playerDetails[1]);
+			String playerStatus = playerDetails[2];
+			int playerRow = Integer.parseInt(playerDetails[3]);
+			int playerColumn = Integer.parseInt(playerDetails[4]);
+			
+			Player newPlayer = new Player(playerName, playerColor, playerStatus, playerRow, playerColumn);
+			players.add(newPlayer);
+		}
+	}
+
+	/*
+	 * Reads in the card config file and creates new cards to add to the board deck
+	 */
+	public void loadCards() throws FileNotFoundException, BadConfigFormatException {
+		System.out.println("Help me in loadCards!");
+		FileReader inCards = new FileReader(cardConfigFile);
+		Scanner cardInfo = new Scanner(inCards);
+
+		//Initializing the current card type to person just so there isn't a null pointer when a new card is added to the deck
+		//These statements assume the config file is formatted correctly
+		String cardEnum = cardInfo.nextLine();
+		CardType currentType = CardType.PERSON;
+		if(cardEnum.equals("PERSON")) {
+			currentType = CardType.PERSON;
+		}
+		else {
+			throw new BadConfigFormatException("Card file not formatted correctly");
+		}
+		
+		while(cardInfo.hasNextLine()) {
+			String currentCard = cardInfo.nextLine();
+			if(currentCard.equals("\n")) {
+				String nextType = cardInfo.nextLine();
+				if(nextType.equals("WEAPONS")) {
+					currentType = CardType.WEAPON;
+				}
+				else if(nextType.equals("ROOMS")) {
+					currentType = CardType.ROOM;
+				}
+				else {
+					throw new BadConfigFormatException("Card file not formatted correctly");
+				}
+				currentCard = cardInfo.nextLine();
+			}
+			
+			//determines the type of card and adds it to its corresponding type list
+			Card newCard = new Card(currentCard, currentType);
+			if(currentType.equals(CardType.PERSON)) {
+				playerCards.add(newCard);
+			}
+			else if(currentType.equals(CardType.WEAPON)) {
+				weaponCards.add(newCard);
+			}
+			else if(currentType.equals(CardType.ROOM)) {
+				roomCards.add(newCard);
+			}
+			else {
+				throw new BadConfigFormatException("Card type in card file not valid");
+			}
+			deck.add(newCard);
+		}
+	}
+
+	public void dealCards() {
+		System.out.println("Help me in deal cards!");
+
+		Set<Card> shuffledDeck = new HashSet<Card>();
+		
+		for(int i = 0; i < deck.size() - 3; i++) {
+			shuffledDeck.add(deck.get(i));
+		}
+		
+		//To get solution, take random card from each card type list and put into solution
+
+		//ArrayList<Card> solution;
+		
+		int i = 0;
+		for(Card currentCard : shuffledDeck) {
+			players.get(i).addCard(currentCard);
+			i += 1;
+			i %= players.size();
+		}
+	}
+
+	/*
+	 * Returns the board deck of cards
+	 */
+	public ArrayList<Card> getDeck() {
+		return deck;
+	}
+
+	/*
+	 * Returns the board's list of players in the game
+	 */
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	// Be sure to trim the color, we don't want spaces around the name
+	public Color convertColor(String strColor) {
+		Color color; 
+		try {
+			// We can use reflection to convert the string to a color
+			Field field =Class.forName("java.awt.Color").getField(strColor.trim());
+			color = (Color)field.get(null);
+		} catch (Exception e) {  
+			color = null; // Not defined  
+		}
+		return color;
+	}
+
+	public Integer getWeaponsCount() {
+		return weaponCards.size();
+	}
+
+	public Integer getPlayersCount() {
+		return playerCards.size();
+	}
+
+	public Integer getRoomsCount() {
+		return roomCards.size();
+	}
+
+	public ArrayList<Card> getWeaponCards() {
+		return weaponCards;
+	}
+
+	public ArrayList<Card> getPlayerCards() {
+		return playerCards;
+	}
+
+	public ArrayList<Card> getRoomCards() {
+		return roomCards;
 	}
 
 }
