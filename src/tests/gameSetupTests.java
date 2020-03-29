@@ -1,3 +1,9 @@
+/*
+ * @author Cole Callihan, Carter Pasqualini
+ * 
+ * gameSetupTests that tests the proper card decks and players were created
+ */ 
+
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,17 +31,18 @@ public class gameSetupTests {
 
 	private static final int NUM_CARDS_PER_PLAYER = 3;
 	private static Board board;
-	
+
 	private static ArrayList<Card> deck = new ArrayList<Card>();
 	private static ArrayList<Player> allPlayers = new ArrayList<Player>();
-	
-	@BeforeClass
+
+	@BeforeAll
 	public static void setUp() throws FileNotFoundException, BadConfigFormatException{
+		System.out.println("Test");
 		board = Board.getInstance();
 		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");
-		
+
 		board.initialize();
-		
+
 		board.loadPeople();
 		board.loadCards();
 		board.dealCards();
@@ -43,10 +50,13 @@ public class gameSetupTests {
 		deck = board.getDeck();
 		allPlayers = board.getPlayers();
 
+		assertEquals(6, allPlayers.size());
+
 	}
 
 	@Test
 	public void testPeopleLoading() {
+		System.out.println("Test");
 
 		//Checking Human Player in first position
 		Color currentColor = convertColor("Blue");
@@ -91,16 +101,15 @@ public class gameSetupTests {
 		assertEquals("Freeze Gun", board.getWeaponCards().get(0).getCardName());
 		assertEquals(CardType.WEAPON, board.getWeaponCards().get(0).getCardType());
 		assertEquals("Spock", board.getPlayerCards().get(0).getCardName());
-		assertEquals(CardType.PERSON, board.getWeaponCards().get(0).getCardType());
+		assertEquals(CardType.PERSON, board.getPlayerCards().get(0).getCardType());
 		assertEquals("Trash Compactor", board.getRoomCards().get(0).getCardName());
-		assertEquals(CardType.ROOM, board.getWeaponCards().get(0).getCardType());	
+		assertEquals(CardType.ROOM, board.getRoomCards().get(0).getCardType());	
 	}
 
 	@Test
 	public void testCardDealing() {
+		Set<Card> cardSet = new HashSet<Card>();
 		for(int i = 0; i < board.getPlayersCount(); i++) {
-
-			Set<Card> cardSet = new HashSet<Card>();
 
 			//If there are 6 players, specific to our SpaceBoard
 			assertEquals(NUM_CARDS_PER_PLAYER, allPlayers.get(i).getCards().size());
@@ -114,12 +123,12 @@ public class gameSetupTests {
 				cardSet.add(allPlayers.get(i).getCards().get(j));
 			}
 
-			assertEquals(18, cardSet.size());
 		}
+		assertEquals(18, cardSet.size());
 	}
 
 
-	
+
 	public Color convertColor(String strColor) {
 		Color color;
 		try {

@@ -421,10 +421,10 @@ public class Board {
 	 * Reads in the board people file and creates new players to send to the board's list of players
 	 */
 	public void loadPeople() throws FileNotFoundException{
-		System.out.println("Help me!");
 		FileReader inPlayers = new FileReader(playerConfigFile);
 		Scanner playerInfo = new Scanner(inPlayers);
 
+		//reads through the file and separates the player info into making new players
 		while(playerInfo.hasNextLine()) {
 			String currentPlayer = playerInfo.nextLine();
 			String[] playerDetails = currentPlayer.split(",");//splits the file line entries into an array
@@ -444,7 +444,6 @@ public class Board {
 	 * Reads in the card config file and creates new cards to add to the board deck
 	 */
 	public void loadCards() throws FileNotFoundException, BadConfigFormatException {
-		System.out.println("Help me in loadCards!");
 		FileReader inCards = new FileReader(cardConfigFile);
 		Scanner cardInfo = new Scanner(inCards);
 
@@ -459,6 +458,7 @@ public class Board {
 			throw new BadConfigFormatException("Card file not formatted correctly");
 		}
 		
+		//Depending on the type of card, the card gets added to the respective card list
 		while(cardInfo.hasNextLine()) {
 			String currentCard = cardInfo.nextLine();
 			if(currentCard.equals("")) {
@@ -493,11 +493,13 @@ public class Board {
 		}
 	}
 
+	/*
+	 * Deals out cards to each player, holding 3 for the solution
+	 */
 	public void dealCards() {
-		System.out.println("Help me in deal cards!");
-
 		Set<Card> shuffledDeck = new HashSet<Card>();
 		
+		//Creates a set of unique cards
 		for(int i = 0; i < deck.size() - 3; i++) {
 			shuffledDeck.add(deck.get(i));
 		}
@@ -506,6 +508,7 @@ public class Board {
 
 		//ArrayList<Card> solution;
 		
+		//Gives each player a card
 		int i = 0;
 		for(Card currentCard : shuffledDeck) {
 			players.get(i).addCard(currentCard);
@@ -541,26 +544,44 @@ public class Board {
 		return color;
 	}
 
+	/*
+	 * Returns the number of weapons in the card deck
+	 */
 	public Integer getWeaponsCount() {
 		return weaponCards.size();
 	}
 
+	/*
+	 * Returns the number of players in the card deck
+	 */
 	public Integer getPlayersCount() {
 		return playerCards.size();
 	}
 
+	/*
+	 * Returns the number of rooms in the card deck
+	 */
 	public Integer getRoomsCount() {
 		return roomCards.size();
 	}
 
+	/*
+	 * Returns the list of weapons in the card deck
+	 */
 	public ArrayList<Card> getWeaponCards() {
 		return weaponCards;
 	}
 
+	/*
+	 * Returns the list of players in the card deck
+	 */
 	public ArrayList<Card> getPlayerCards() {
 		return playerCards;
 	}
 
+	/*
+	 * Returns the list of rooms in the card deck
+	 */
 	public ArrayList<Card> getRoomCards() {
 		return roomCards;
 	}

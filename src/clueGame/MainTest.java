@@ -1,4 +1,4 @@
-package clueGame;
+/*package clueGame;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -31,3 +31,4 @@ public class MainTest {
 		}
 	}
 }
+*/
