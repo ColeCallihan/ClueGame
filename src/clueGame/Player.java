@@ -12,7 +12,7 @@ public class Player {
 	private int column;
 	private Color color;
 	
-	private ArrayList<Card> myCards;
+	private ArrayList<Card> myCards = new ArrayList<Card>();
 	
 	public Player(String playerName2, Color playerColor, String playerStatus, int playerRow, int playerColumn) {
 		this.playerName = playerName2;

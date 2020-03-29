@@ -1,1 +1,1 @@
-Incorrect legend format
+Card file not formatted correctly

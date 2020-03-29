@@ -19,11 +19,11 @@ public class Board {
 	public final int MAX_BOARD_SIZE = 50;
 
 	//instance variables of lists of players and cards
-	private ArrayList<Player> players;
-	private ArrayList<Card> deck;
-	private ArrayList<Card> playerCards;
-	private ArrayList<Card> weaponCards;
-	private ArrayList<Card> roomCards;
+	private ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<Card> deck = new ArrayList<Card>();
+	private ArrayList<Card> playerCards = new ArrayList<Card>();
+	private ArrayList<Card> weaponCards = new ArrayList<Card>();
+	private ArrayList<Card> roomCards = new ArrayList<Card>();
 
 	//initial 2D array of BoardCells
 	private BoardCell[][] board;
@@ -427,7 +427,7 @@ public class Board {
 
 		while(playerInfo.hasNextLine()) {
 			String currentPlayer = playerInfo.nextLine();
-			String[] playerDetails = currentPlayer.split(", ");//splits the file line entries into an array
+			String[] playerDetails = currentPlayer.split(",");//splits the file line entries into an array
 
 			String playerName = playerDetails[0];
 			Color playerColor = convertColor(playerDetails[1]);
@@ -452,7 +452,7 @@ public class Board {
 		//These statements assume the config file is formatted correctly
 		String cardEnum = cardInfo.nextLine();
 		CardType currentType = CardType.PERSON;
-		if(cardEnum.equals("PERSON")) {
+		if(cardEnum.equals("PEOPLE")) {
 			currentType = CardType.PERSON;
 		}
 		else {
@@ -461,7 +461,7 @@ public class Board {
 		
 		while(cardInfo.hasNextLine()) {
 			String currentCard = cardInfo.nextLine();
-			if(currentCard.equals("\n")) {
+			if(currentCard.equals("")) {
 				String nextType = cardInfo.nextLine();
 				if(nextType.equals("WEAPONS")) {
 					currentType = CardType.WEAPON;

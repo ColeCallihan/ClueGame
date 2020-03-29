@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +26,8 @@ public class gameSetupTests {
 	private static final int NUM_CARDS_PER_PLAYER = 3;
 	private static Board board;
 	
-	private static ArrayList<Card> deck;
-	private static ArrayList<Player> allPlayers;
+	private static ArrayList<Card> deck = new ArrayList<Card>();
+	private static ArrayList<Player> allPlayers = new ArrayList<Player>();
 	
 	@BeforeClass
 	public static void setUp() throws FileNotFoundException, BadConfigFormatException{
@@ -99,7 +100,7 @@ public class gameSetupTests {
 	public void testCardDealing() {
 		for(int i = 0; i < board.getPlayersCount(); i++) {
 
-			Set cardSet = new HashSet();
+			Set<Card> cardSet = new HashSet<Card>();
 
 			//If there are 6 players, specific to our SpaceBoard
 			assertEquals(NUM_CARDS_PER_PLAYER, allPlayers.get(i).getCards().size());
@@ -118,6 +119,7 @@ public class gameSetupTests {
 	}
 
 
+	
 	public Color convertColor(String strColor) {
 		Color color;
 		try {
