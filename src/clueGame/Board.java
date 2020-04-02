@@ -42,6 +42,7 @@ public class Board {
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String cardConfigFile;
+	public Solution theAnswer;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -584,6 +585,15 @@ public class Board {
 	 */
 	public ArrayList<Card> getRoomCards() {
 		return roomCards;
+	}
+
+	public void setPlayers(ArrayList<Player> tempPlayers) {
+		players = tempPlayers;
+	}
+
+	public Card makeSuggestion(Solution solution, Player player1) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

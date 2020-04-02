@@ -8,6 +8,7 @@ package clueGame;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Player {
 
@@ -31,7 +32,9 @@ public class Player {
 		this.row = playerRow;
 		this.column = playerColumn;
 	}
-
+	public Player() {
+		// TODO Auto-generated constructor stub
+	}
 	/*
 	 * Returns player name
 	 */
@@ -86,4 +89,43 @@ public class Player {
 		
 	}
 	*/
+	public void setColumn(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setRow(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public BoardCell pickLocation(Set<BoardCell> targets) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPrevLocation(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public String getRoom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public Solution generateSolution() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void removeWeapons(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeSuspects(String string) {
+		// TODO Auto-generated method stub
+		
+	}
 }
