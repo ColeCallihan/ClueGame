@@ -115,4 +115,14 @@ public class BoardCell {
 	public char getInitial() {
 		return initial;
 	}
+	
+	/*
+	 * equals statement so that the testing can compared BoardCells
+	 */
+	public boolean equals(BoardCell compareCell) {
+		if(compareCell.getInitial() == (this.initial) && compareCell.getRow() == this.row && compareCell.getColumn() == this.column) {
+			return true;
+		}
+		return false;
+	}
 }

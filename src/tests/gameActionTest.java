@@ -1,3 +1,10 @@
+/*
+ * @author Cole Callihan, Carter Pasqualini
+ * 
+ * gameActionTest class that tests interaction between players targeting movement locations
+ * and suggestions and accusation creation
+ */ 
+
 package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,14 +47,11 @@ class gameActionTest {
 	private static ArrayList<Card> deck = new ArrayList<Card>();
 	private static ArrayList<Player> allPlayers = new ArrayList<Player>();
 	
-	static ComputerPlayer player;
-	static ComputerPlayer playerUnseen;
+	private static ComputerPlayer player;
+	private static ComputerPlayer playerUnseen;
 	
 	@BeforeAll
 	public static void setUp() throws FileNotFoundException, BadConfigFormatException {
-		player = new ComputerPlayer();
-		playerUnseen = new ComputerPlayer();
-		
 		board = Board.getInstance();
 		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");
 
@@ -55,6 +59,9 @@ class gameActionTest {
 
 		board.loadPeople();
 		board.loadCards();
+		
+		player = new ComputerPlayer();
+		playerUnseen = new ComputerPlayer();
 	}
 
 	@Test
@@ -89,7 +96,7 @@ class gameActionTest {
 		
 		
 		//if room just visited is in list, each target (including room) selected randomly
-		player.setPrevLocation("Lounge");
+		player.setPrevLocation(board.getCellAt(player.getRow(), player.getColumn()));
 		board.calcTargets(14,20,1);
 		boolean loc_14_19 = false;
 		boolean loc_14_21 = false;
@@ -128,47 +135,66 @@ class gameActionTest {
 		board.theAnswer = solution;
 		
 		//solution that is correct
-		assertTrue(player.makeAccusation("Spock","Probe","Bridge"));
+		assertTrue(board.checkAccusation(new Solution("Spock","Probe","Bridge")));
 		
 		//solution with wrong person
-		assertFalse(player.makeAccusation("Alien","Probe","Bridge"));
+		assertFalse(board.checkAccusation(new Solution("Alien","Probe","Bridge")));
 		//solution with wrong weapon
-		assertFalse(player.makeAccusation("Spock","Lazer","Bridge"));
+		assertFalse(board.checkAccusation(new Solution("Spock","Lazer","Bridge")));
 		//solution with wrong room
-		assertFalse(player.makeAccusation("Spock","Probe","Lounge"));
+		assertFalse(board.checkAccusation(new Solution("Spock","Probe","Lounge")));
 	}
 
 
 	@Test
 	public void testSuggestion() {
 		
+		System.out.println(playerUnseen.suspectWeapons.size());
+		
 		//Only one weapon and person left
 		player.removeWeapons("Freeze Gun");
+		
+		System.out.println(playerUnseen.suspectWeapons.size());
+
+		
 		player.removeWeapons("Face Hugger");
 		player.removeWeapons("Probe");
 		player.removeWeapons("Lazer");
 		player.removeWeapons("FlameThrower");
 
-		player.removeSuspects("Spock");
-		player.removeSuspects("Android");
-		player.removeSuspects("Alien");
-		player.removeSuspects("Tourist");
-		player.removeSuspects("Engineer");
+		System.out.println(playerUnseen.suspectWeapons.size());
+		
+		player.removePeople("Spock");
+		player.removePeople("Android");
+		player.removePeople("Alien");
+		player.removePeople("Tourist");
+		player.removePeople("Engineer");
+		
+		player.setRow(0);
+		player.setColumn(0);
+		
+		System.out.println(playerUnseen.suspectWeapons.size());
 		
 		//Player with more options
 		playerUnseen.removeWeapons("Freeze Gun");
 		playerUnseen.removeWeapons("Face Hugger");
 		playerUnseen.removeWeapons("Probe");
+				
+		playerUnseen.removePeople("Spock");
+		playerUnseen.removePeople("Android");
+		playerUnseen.removePeople("Alien");
 		
-		playerUnseen.removeSuspects("Spock");
-		playerUnseen.removeSuspects("Android");
-		playerUnseen.removeSuspects("Alien");
+		playerUnseen.setColumn(0);
+		playerUnseen.setRow(0);
+		
+		System.out.println(playerUnseen.suspectWeapons.size());
+
 		
 		//Room matches current location
 		Solution mySol = new Solution("Spock","Probe","Bridge");
 		player.setRow(14);
 		player.setColumn(22);
-		assertTrue(mySol.room == player.getRoom());
+		assertEquals('B', board.getCellAt(player.getRow(), player.getColumn()).getInitial());
 		
 		//If only one weapon not seen, it's selected
 		mySol = player.generateSolution();
@@ -189,23 +215,23 @@ class gameActionTest {
 		{
 			mySol = playerUnseen.generateSolution();
 			//Guessing weapons
-			if(mySol.weapon == "Lazer") {
+			if(mySol.weapon.equals("Lazer")) {
 				LazerGuess = true;
 			}
-			if(mySol.weapon == "FlameThrower") {
+			if(mySol.weapon.equals("FlameThrower")) {
 				FlameThrowerGuess = true;
 			}
-			if(mySol.weapon == "Scapel") {
+			if(mySol.weapon.equals("Scapel")) {
 				ScapelGuess = true;
 			}
 			//Guessing People
-			if(mySol.person == "Tourist") {
+			if(mySol.person.equals("Tourist")) {
 				TouristGuess = true;
 			}
-			if(mySol.person == "Engineer") {
+			if(mySol.person.equals("Engineer")) {
 				EngineerGuess = true;
 			}
-			if(mySol.person == "Captain") {
+			if(mySol.person.equals("Captain")) {
 				CaptainGuess = true;
 			}
 		}
@@ -241,8 +267,9 @@ class gameActionTest {
 		Card player4card2 = new Card("Lazer", CardType.WEAPON);
 		Card player4card3 = new Card("Lounge", CardType.ROOM);
 		
+		//IMPORTANT
 		Solution realBoi = new Solution("Engineer","FlameThrower","Sick Bay");
-		board.theAnswer = realBoi;
+		Board.theAnswer = realBoi;
 		
 		player1.addCard(player1card1);
 		player1.addCard(player1card2);
@@ -261,27 +288,36 @@ class gameActionTest {
 		player4.addCard(player4card3);
 		
 		ArrayList<Player> tempPlayers = new ArrayList<Player>();
+		tempPlayers.add(player1);
+		tempPlayers.add(player2);
+		tempPlayers.add(player3);
+		tempPlayers.add(player4);
 		board.setPlayers(tempPlayers);
 
 		
 		//Suggestion no one can disprove returns null
 		Solution nullBoi = new Solution("Engineer","FlameThrower","Sick Bay");
-		assertEquals(null, board.makeSuggestion(nullBoi, player1));
+		assertEquals(null, board.handleSuggestion(nullBoi, player1));
+		
 		//Suggestion only accusing player can disprove returns null
 		Solution almostRight = new Solution("Android","FlameThrower","Sick Bay");
-		assertEquals(null, board.makeSuggestion(almostRight, player2));
+		assertEquals(null, board.handleSuggestion(almostRight, player2));
+		
 		//Suggestion only human can disprove returns answer (i.e., card that disproves suggestion)
 		Solution closeEnough = new Solution("Spock","FlameThrower","Sick Bay");
-		assertEquals("Spock", board.makeSuggestion(closeEnough, player3).getCardName());
+		assertEquals("Spock", board.handleSuggestion(closeEnough, player3).getCardName());
+		
 		//Suggestion only human can disprove, but human is accuser, returns null
-		assertEquals(null, board.makeSuggestion(closeEnough, player1));
+		assertEquals(null, board.handleSuggestion(closeEnough, player1));
+		
 		//Suggestion that two players can disprove, correct player (based on starting with next player in list) returns answer
 		Solution twoWrong = new Solution("Alien","Lazer","Sick Bay");
-		assertEquals("Alien", board.makeSuggestion(twoWrong, player2).getCardName());
-		assertEquals("Alien", board.makeSuggestion(twoWrong, player2).getCardName());
+		assertEquals("Alien", board.handleSuggestion(twoWrong, player2).getCardName());
+		assertEquals("Alien", board.handleSuggestion(twoWrong, player2).getCardName());
+		
 		//Suggestion that human and another player can disprove, other player is next in list, ensure other player returns answer
 		twoWrong = new Solution("Spock","Face Hugger","Sick Bay");
-		assertEquals("Spock", board.makeSuggestion(twoWrong, player4).getCardName());
+		assertEquals("Spock", board.handleSuggestion(twoWrong, player4).getCardName());
 		
 		
 		
@@ -289,16 +325,16 @@ class gameActionTest {
 		//Player that can disprove
 		Card wrongPerson = new Card("Spock", CardType.PERSON);
 		Card wrongWeapon = new Card("Scapel", CardType.WEAPON);
-		Card wrongRoom = new Card("Bridge", CardType.ROOM);
 		
 		player2.addCard(wrongWeapon);
 		player2.addCard(wrongPerson);
-		player2.addCard(wrongRoom);
 		
 		Solution soClose = new Solution("Engineer","Scapel","Sick Bay");
 		Solution wrong = new Solution("Spock","Scapel","Bridge");
+		
 		//If player has only one matching card it should be returned
-		assertEquals("Scapel", board.makeSuggestion(soClose, player1).getCardName());
+		assertEquals("Scapel", board.handleSuggestion(soClose, player1).getCardName());
+		
 		//If players has >1 matching card, returned card should be chosen randomly
 		Card random1 = new Card("Spock", CardType.PERSON);
 		Card random2 = new Card("Scapel", CardType.WEAPON);
@@ -307,15 +343,16 @@ class gameActionTest {
 		Boolean random2Chosen = false;
 		Boolean random3Chosen = false;
 		
+		//Makes sure every card can be picked from the player's hand
 		for(int i = 0; i < 100; i++) {
-			Card returned = board.makeSuggestion(wrong, player1);
-			if(returned == random1) {
+			Card returned = board.handleSuggestion(wrong, player1);
+			if(returned.equals(random1)) {
 				random1Chosen = true;
 			}
-			if(returned == random2) {
+			if(returned.equals(random2)) {
 				random2Chosen = true;
 			}
-			if(returned == random3) {
+			if(returned.equals(random3)) {
 				random3Chosen = true;
 			}
 		}
@@ -325,7 +362,7 @@ class gameActionTest {
 		assertTrue(random3Chosen);
 		
 		//If player has no matching cards, null is returned
-		assertEquals(null, board.makeSuggestion(realBoi, player1));
+		assertEquals(null, board.handleSuggestion(realBoi, player1));
 		
 	}
 

@@ -21,6 +21,7 @@ public class Board {
 	//instance variables of lists of players and cards
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Card> deck = new ArrayList<Card>();
+	private ArrayList<Card> tempDeck = deck;
 	private ArrayList<Card> playerCards = new ArrayList<Card>();
 	private ArrayList<Card> weaponCards = new ArrayList<Card>();
 	private ArrayList<Card> roomCards = new ArrayList<Card>();
@@ -42,7 +43,7 @@ public class Board {
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String cardConfigFile;
-	public Solution theAnswer;
+	public static Solution theAnswer;
 
 	// variable used for singleton pattern
 	private static Board theInstance = new Board();
@@ -435,7 +436,7 @@ public class Board {
 			String playerStatus = playerDetails[2];
 			int playerRow = Integer.parseInt(playerDetails[3]);
 			int playerColumn = Integer.parseInt(playerDetails[4]);
-			
+
 			Player newPlayer = new Player(playerName, playerColor, playerStatus, playerRow, playerColumn);
 			players.add(newPlayer);
 		}
@@ -458,7 +459,7 @@ public class Board {
 		else {
 			throw new BadConfigFormatException("Card file not formatted correctly");
 		}
-		
+
 		//Depending on the type of card, the card gets added to the respective card list
 		while(cardInfo.hasNextLine()) {
 			String currentCard = cardInfo.nextLine();
@@ -475,7 +476,7 @@ public class Board {
 				}
 				currentCard = cardInfo.nextLine();
 			}
-			
+
 			//determines the type of card and adds it to its corresponding type list
 			Card newCard = new Card(currentCard, currentType);
 			if(currentType.equals(CardType.PERSON)) {
@@ -498,23 +499,21 @@ public class Board {
 	 * Deals out cards to each player, holding 3 for the solution
 	 */
 	public void dealCards() {
-		Set<Card> shuffledDeck = new HashSet<Card>();
-		
-		//Creates a set of unique cards
-		for(int i = 0; i < deck.size() - 3; i++) {
-			shuffledDeck.add(deck.get(i));
-		}
-		
-		//To get solution, take random card from each card type list and put into solution
+		ArrayList<Card> shuffledDeck = new ArrayList<Card>();
 
-		//ArrayList<Card> solution;
-		
+		selectAnswer();
+		//To get solution, take random card from each card type list and put into solution
+		shuffledDeck = tempDeck;
+
 		//Gives each player a card
 		int i = 0;
 		for(Card currentCard : shuffledDeck) {
-			players.get(i).addCard(currentCard);
+			Random rand = new Random();
+			int random = rand.nextInt(shuffledDeck.size());
+			players.get(i).addCard(shuffledDeck.get(random));
 			i += 1;
 			i %= players.size();
+			shuffledDeck.remove(shuffledDeck.get(random));
 		}
 	}
 
@@ -587,13 +586,68 @@ public class Board {
 		return roomCards;
 	}
 
+	/*
+	 * Sets the list of players to a given list of players
+	 */
 	public void setPlayers(ArrayList<Player> tempPlayers) {
 		players = tempPlayers;
 	}
 
-	public Card makeSuggestion(Solution solution, Player player1) {
-		// TODO Auto-generated method stub
-		return null;
+	/*
+	 * Asks each player if they can disprove the solution presented by the player passed in
+	 */
+	public Card handleSuggestion(Solution solution, Player player1) {
+		int currentPlayerIndex = players.indexOf(player1);
+		Card answer = null;
+
+		//iterates to each player until either every player was tested or a player has a card to disprove the solution
+		while(true){
+			currentPlayerIndex++;
+			currentPlayerIndex %= players.size();
+			if(currentPlayerIndex == players.indexOf(player1)) {
+				return null;
+			}
+			else if(players.get(currentPlayerIndex).disproveSuggestion(solution) != null) {
+				answer = players.get(currentPlayerIndex).disproveSuggestion(solution);
+				return answer;
+			}
+		}
 	}
 
+	/*
+	 * Returns whether or not the accusation matched the solution
+	 */
+	public boolean checkAccusation(Solution testSolution) {
+		if(Board.theAnswer.person.equals(testSolution.person) && Board.theAnswer.weapon.equals(testSolution.weapon) && Board.theAnswer.room.equals(testSolution.room)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/*
+	 * Sets the answer to 3 random cards
+	 */
+	public void selectAnswer() {
+		Random rand = new Random();
+
+		//Grabs a random person card
+		int randomIndex = rand.nextInt(playerCards.size());
+		Card currentSolutionPersonCard = playerCards.get(randomIndex);
+		tempDeck.remove(currentSolutionPersonCard);
+
+		//Grabs a random weapon card
+		randomIndex = rand.nextInt(weaponCards.size());
+		Card currentSolutionWeaponCard = weaponCards.get(randomIndex);
+		tempDeck.remove(currentSolutionWeaponCard);
+
+		//Grabs a random room card
+		randomIndex = rand.nextInt(roomCards.size());
+		Card currentSolutionRoomCard = roomCards.get(randomIndex);
+		tempDeck.remove(currentSolutionRoomCard);
+
+		//Sets the answer
+		theAnswer = new Solution(currentSolutionPersonCard.getCardName(), currentSolutionWeaponCard.getCardName(), currentSolutionRoomCard.getCardName());
+	}
 }

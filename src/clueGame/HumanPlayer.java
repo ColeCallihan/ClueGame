@@ -1,26 +1,42 @@
+/*
+ * @author Cole Callihan, Carter Pasqualini
+ * 
+ * HumanPlayer class that defines methods specific to human players
+ */ 
+
 package clueGame;
 
 import java.awt.Color;
+import java.util.Set;
 
 public class HumanPlayer extends Player{
 
+	/*
+	 * HumanPlayer constructor that calls the super constructor to set the HumanPlayer name, color, status, row, and column
+	 */
 	public HumanPlayer(String playerName2, Color playerColor, String playerStatus, int playerRow, int playerColumn) {
 		super(playerName2, playerColor, playerStatus, playerRow, playerColumn);
-		// TODO Auto-generated constructor stub
 	}
 
+	/*
+	 * Default HumanPlayer constructor that calls the super default constructor
+	 */
 	public HumanPlayer() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	@Override
+	/*
+	 * To be implemented
+	 */
 	public Solution generateSolution() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	public Boolean makeAccusation(String person, String weapon, String room) {
-		// TODO Auto-generated method stub
+	
+	/*
+	 * To be implemented
+	 */
+	public BoardCell pickLocation(Set<BoardCell> targets) {
+		
 		return null;
 	}
 }

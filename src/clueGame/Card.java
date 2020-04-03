@@ -6,7 +6,7 @@
 
 package clueGame;
 
-public class Card {
+public class Card{
 
 	//instance variables for the name and card type
 	private String cardName;
@@ -35,9 +35,14 @@ public class Card {
 	}
 	
 	/*
-	@Override
-	public boolean equals() {
-		
+	 * If the cards share the same name and type, they are equal
+	 */
+	public boolean equals(Card compareCard) {
+		if(cardName.equals(compareCard.getCardName()) && cardType == compareCard.getCardType()){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-	*/
 }
