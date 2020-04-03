@@ -1,3 +1,21 @@
+commit 7ff0d01779d2348925cbc6ba13d5bc55b6e0ca83
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Apr 3 01:29:01 2020 -0600
+
+    Implemented all of the C19A methods and all tests now pass. Comments also added
+
+commit 5f7312157f42bfdbc8056c3e72496e6cbdf850f8
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Wed Apr 1 20:45:56 2020 -0600
+
+    All tests implemented and are failing at the moment
+
+commit ab3800fadc3c67e9a7ec66b52817f3d13dd9f2d4
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sun Mar 29 01:26:48 2020 -0600
+
+    Updated git log and removed some final testing statements
+
 commit 59211d076422d8c1d8e6e8889c1c6ff6bc261cf9
 Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
 Date:   Sun Mar 29 01:24:17 2020 -0600
