@@ -1,3 +1,21 @@
+commit 1c20053ab9e642bdd9622d44ec3fefaad69f9211
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Apr 8 20:25:24 2020 -0600
+
+    Completed C21A with GUI for the board and detective notes
+
+commit 02ca2a27daf4d97ae086e6a721afeaa60ea8a806
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Fri Apr 3 21:02:35 2020 -0600
+
+    Added Basic GUI elements and package
+
+commit a70c44f5f264bddf1541a2a4761b71c2e7c2ad5b
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Apr 3 01:31:58 2020 -0600
+
+    Updated git log
+
 commit 7ff0d01779d2348925cbc6ba13d5bc55b6e0ca83
 Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
 Date:   Fri Apr 3 01:29:01 2020 -0600
