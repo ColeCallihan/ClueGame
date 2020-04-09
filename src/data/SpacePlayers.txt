@@ -1,6 +1,6 @@
 Spock,Blue,Human,28,9
 Engineer,Gray,Computer,0,9
-Tourist,Yellow,Computer,28,23
+Tourist,Black,Computer,28,23
 Alien,Green,Computer,21,0
 Captain,Red,Computer,11,28
-Android,White,Computer,0,17
+Android,Orange,Computer,0,17

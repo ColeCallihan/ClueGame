@@ -5,14 +5,21 @@
  */
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class BoardCell {
 	
 	//instance variables to define the position, row and column, of the BoardCell
 	private int row;
+	private int cellWidth = 19;
+	private int cellHeight = 19;
 	private int column;
 	private char initial;
+	private String roomName;
 	private DoorDirection doordir;
-	
+	private boolean displayName = false;
+
 	/*
 	 * Constructor that sets the row and column of the BoardCell to zero by default
 	 */
@@ -116,6 +123,30 @@ public class BoardCell {
 		return initial;
 	}
 	
+	public boolean isDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(boolean displayName) {
+		this.displayName = displayName;
+	}
+	
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
+	}
+	
+	public String getRoomName() {
+		return roomName;
+	}
+	
+	public int getCellWidth() {
+		return cellWidth;
+	}
+	
+	public int getCellHeight() {
+		return cellHeight;
+	}
+	
 	/*
 	 * equals statement so that the testing can compared BoardCells
 	 */
@@ -124,5 +155,45 @@ public class BoardCell {
 			return true;
 		}
 		return false;
+	}
+	
+	/*
+	 * Draw function that is called by the board so each cell can be printed in the GUI
+	 */
+	public void draw(Graphics g) {
+		//Calculates the pixel placement of each boardCell
+		int startY = row * cellHeight;
+		int startX = column * cellWidth;
+		
+		//If the cell is a walkway, it is printed yellow with a border
+		if(isWalkway()) {
+			g.setColor(Color.YELLOW);
+			g.fillRect(startX, startY, cellWidth, cellHeight);
+			g.setColor(Color.BLACK);
+			g.drawRect(startX, startY, cellWidth, cellHeight);
+		}
+		//If the cell has been chosen in the config files to print the room name, it prints it
+		else if(isDisplayName()) {
+			g.setColor(Color.BLUE);
+			g.drawString(getRoomName(), startX, startY);
+		}
+		//If the cell is a door, it prints a blue line where the door is
+		else if(isDoorway()) {
+			g.setColor(Color.BLUE);
+			switch (getDoorDirection()) {
+			case UP:
+				g.fillRect(startX, startY, cellWidth, 4);
+				break;
+			case LEFT:
+				g.fillRect(startX, startY, 4, cellHeight);
+				break;
+			case RIGHT:
+				g.fillRect(startX + cellWidth - 4, startY, 4, cellHeight);
+				break;
+			case DOWN:
+				g.fillRect(startX, startY + cellHeight - 4, cellWidth, 4);
+				break;
+			}
+		}
 	}
 }

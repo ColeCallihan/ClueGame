@@ -6,12 +6,15 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
-public class Board {
+import javax.swing.JPanel;
+
+public class Board extends JPanel{
 
 	//instance variables for integers that keep track of the board columns, rows, and max board size
 	private int numRows;
@@ -68,6 +71,8 @@ public class Board {
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
+			loadPeople();
+			loadCards();
 
 		}catch(BadConfigFormatException e) {
 
@@ -160,6 +165,11 @@ public class Board {
 							break;
 						case 'L':
 							createCellAddToMap(rows, rowLayout, i, DoorDirection.LEFT);
+							break;
+						case 'N':
+							createCellAddToMap(rows, rowLayout, i, DoorDirection.NONE);
+							board[rows][i].setDisplayName(true);
+							board[rows][i].setRoomName(legend.get(board[rows][i].getInitial()));
 							break;
 						default:
 							//the door direction is not a direction, meaning it is N, ignore it
@@ -432,7 +442,7 @@ public class Board {
 			String[] playerDetails = currentPlayer.split(",");//splits the file line entries into an array
 
 			String playerName = playerDetails[0];
-			Color playerColor = convertColor(playerDetails[1]);
+			Color playerColor = convertColor(playerDetails[1].toUpperCase());
 			String playerStatus = playerDetails[2];
 			int playerRow = Integer.parseInt(playerDetails[3]);
 			int playerColumn = Integer.parseInt(playerDetails[4]);
@@ -649,5 +659,37 @@ public class Board {
 
 		//Sets the answer
 		theAnswer = new Solution(currentSolutionPersonCard.getCardName(), currentSolutionWeaponCard.getCardName(), currentSolutionRoomCard.getCardName());
+	}
+	
+	/*
+	 * Prints the entire board when it is called to be drawn in the GUI
+	 * It printes each boardCell and player
+	 */
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
+		//Sets the background color for the rooms then printes each BoardCell that is a Walkway
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, 552, 552);
+		for(int i = 0; i < board.length; i++) {
+			for(int j = 0; j < board[i].length; j++) {
+				board[i][j].draw(g);
+			}
+		}
+		
+		//Iterates through every player and draws them on the board
+		for(Player currentPlayer : players) {
+			Color currentColor = currentPlayer.getColor();
+			g.setColor(currentColor);//test
+			
+			int currentRow = currentPlayer.getRow();
+			int currentCol = currentPlayer.getColumn();
+			int cellWidth = board[currentRow][currentCol].getCellWidth();
+			int cellHeight = board[currentRow][currentCol].getCellHeight();
+			int startY = currentRow * board[currentRow][currentCol].getCellHeight();
+			int startX = currentCol * board[currentRow][currentCol].getCellWidth();
+			
+			g.fillOval(startX, startY, cellWidth, cellHeight);
+		}
 	}
 }
