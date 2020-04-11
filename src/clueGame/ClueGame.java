@@ -14,26 +14,28 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame{
 
 	//Sets instance variables for each panel and the static board
 	private DetectiveNotes playerNotes;
 	private GameControlPanel controlPanel;
+	private CardControlPanel cardPanel;
 	Board board;
 	
 	/*
 	 * Constructor for ClueGame. Creates all of the panels, windows, and sets config files
 	 */
 	public ClueGame() {
+		//Creating splash screen for once you enter the game
+		JOptionPane splashScreen = new JOptionPane();
+		splashScreen.showMessageDialog(this, "You are Spock, press Next Player to begin play", "Welcome to Space Clue", JOptionPane.INFORMATION_MESSAGE);
+		
 		//Sets preferences for the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue Game");
 		setSize(960, 825);
-		
-		//Creates the game control panel at the bottom of the GUI
-		controlPanel = new GameControlPanel();
-		add(controlPanel, BorderLayout.SOUTH);
 		
 		//Sets the game's config files and draws the board in the center of the GUI
 		board = Board.getInstance();
@@ -41,6 +43,14 @@ public class ClueGame extends JFrame{
 		board.initialize();
 		add(board, BorderLayout.CENTER);
 		
+		//Add cards to the east of the game board
+		cardPanel = new CardControlPanel();
+		add(cardPanel, BorderLayout.EAST);
+		
+		//Creates the game control panel at the bottom of the GUI
+		controlPanel = new GameControlPanel();
+		add(controlPanel, BorderLayout.SOUTH);
+				
 		//Creates the menu bar in the top left of the GUI
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -99,8 +109,6 @@ public class ClueGame extends JFrame{
 	public static void main(String[] args) {
 		// Create the JFrame
 		ClueGame frame = new ClueGame();
-
-
 		frame.setVisible(true);
 	}
 

@@ -57,8 +57,8 @@ class gameActionTest {
 
 		board.initialize();
 
-		board.loadPeople();
-		board.loadCards();
+		//board.loadPeople();
+		//board.loadCards();
 		
 		player = new ComputerPlayer();
 		playerUnseen = new ComputerPlayer();

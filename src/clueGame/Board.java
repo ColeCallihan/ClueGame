@@ -73,6 +73,7 @@ public class Board extends JPanel{
 			loadBoardConfig();
 			loadPeople();
 			loadCards();
+			dealCards();
 
 		}catch(BadConfigFormatException e) {
 
@@ -517,7 +518,8 @@ public class Board extends JPanel{
 
 		//Gives each player a card
 		int i = 0;
-		for(Card currentCard : shuffledDeck) {
+		int max = shuffledDeck.size();
+		for(int j = 0; j < max; j++) {
 			Random rand = new Random();
 			int random = rand.nextInt(shuffledDeck.size());
 			players.get(i).addCard(shuffledDeck.get(random));

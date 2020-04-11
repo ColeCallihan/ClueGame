@@ -39,12 +39,7 @@ public class gameSetupTests {
 	public static void setUp() throws FileNotFoundException, BadConfigFormatException{
 		board = Board.getInstance();
 		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");
-
 		board.initialize();
-
-		board.loadPeople();
-		board.loadCards();
-		board.dealCards();
 
 		deck = board.getDeck();
 		allPlayers = board.getPlayers();
