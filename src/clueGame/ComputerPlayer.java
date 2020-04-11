@@ -62,7 +62,7 @@ public class ComputerPlayer extends Player{
 		ArrayList<BoardCell> roomList = new ArrayList<BoardCell>();
 		
 		for(BoardCell currentTarget : targets) {
-			if(currentTarget.isRoom()) {
+			if(currentTarget.isDoorway()) {
 				roomList.add(currentTarget);
 ;			}
 		}

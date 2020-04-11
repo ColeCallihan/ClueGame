@@ -26,7 +26,7 @@ public class Modified_BoardAdjTargetTests {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// Using Our Config Files
-		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt");		
+		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
 	}

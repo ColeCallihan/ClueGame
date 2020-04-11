@@ -42,7 +42,7 @@ public class gameSetupTests {
 		board.initialize();
 
 		deck = board.getDeck();
-		allPlayers = board.getPlayers();
+		allPlayers = (ArrayList<Player>)board.getPlayers().clone();
 
 		assertEquals(6, allPlayers.size());
 
@@ -51,7 +51,7 @@ public class gameSetupTests {
 	@Test
 	public void testPeopleLoading() {
 		//Checking Human Player in first position
-		Color currentColor = convertColor("Blue");
+		Color currentColor = convertColor("BLUE");
 		assertEquals(6, allPlayers.size());
 		assertEquals("Spock", allPlayers.get(0).getName());
 		assertEquals("Human", allPlayers.get(0).getStatus());
@@ -60,7 +60,7 @@ public class gameSetupTests {
 		assertEquals(9, allPlayers.get(0).getColumn());
 
 		//Checking the 3rd computer player in position 4
-		currentColor = convertColor("Green");
+		currentColor = convertColor("GREEN");
 		assertEquals(6, allPlayers.size());
 		assertEquals("Alien", allPlayers.get(3).getName());
 		assertEquals("Computer", allPlayers.get(3).getStatus());
@@ -69,7 +69,7 @@ public class gameSetupTests {
 		assertEquals(0, allPlayers.get(3).getColumn());
 
 		//Checking the last computer player in position 6
-		currentColor = convertColor("White");
+		currentColor = convertColor("ORANGE");
 		assertEquals(6, allPlayers.size());
 		assertEquals("Android", allPlayers.get(5).getName());
 		assertEquals("Computer", allPlayers.get(5).getStatus());

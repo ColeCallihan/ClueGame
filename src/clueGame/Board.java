@@ -25,6 +25,7 @@ public class Board extends JPanel{
 	private ArrayList<Player> players = new ArrayList<Player>();
 	private ArrayList<Card> deck = new ArrayList<Card>();
 	private ArrayList<Card> tempDeck = deck;
+	private ArrayList<Card> returnDeck = new ArrayList<Card>();
 	private ArrayList<Card> playerCards = new ArrayList<Card>();
 	private ArrayList<Card> weaponCards = new ArrayList<Card>();
 	private ArrayList<Card> roomCards = new ArrayList<Card>();
@@ -504,6 +505,7 @@ public class Board extends JPanel{
 			}
 			deck.add(newCard);
 		}
+		returnDeck = (ArrayList<Card>) deck.clone();
 	}
 
 	/*
@@ -533,7 +535,7 @@ public class Board extends JPanel{
 	 * Returns the board deck of cards
 	 */
 	public ArrayList<Card> getDeck() {
-		return deck;
+		return returnDeck;
 	}
 
 	/*

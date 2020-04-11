@@ -35,7 +35,7 @@ public class Modified_FileInitTests {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
-		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt");		
+		board.setConfigFiles("SpaceStationBoard.csv", "ClueRooms.txt.txt", "SpacePlayers.txt", "SpaceCards.txt");		
 		// Initialize will load BOTH config files 
 		board.initialize();
 	}
@@ -55,7 +55,7 @@ public class Modified_FileInitTests {
 		assertEquals("Transporter Room", legend.get('P'));
 		assertEquals("Generator Room", legend.get('G'));
 		assertEquals("Sleeping Quarters", legend.get('Q'));
-		assertEquals("Shield Generator", legend.get('H'));
+		assertEquals("Shield Gen", legend.get('H'));
 		assertEquals("Closet", legend.get('X'));
 		assertEquals("Walkway", legend.get('W'));
 	}
