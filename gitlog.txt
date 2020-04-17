@@ -1,3 +1,33 @@
+commit 12c208f9f519457d03027e4b93390b5517eb9c24
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Apr 17 16:10:10 2020 -0600
+
+    Finished C23A with comments, running with no known errors
+
+commit 0ad7937bd535e9162c0f3fe9a67640dac941f1d5
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Fri Apr 17 00:08:50 2020 -0600
+
+    Still working on C23A
+
+commit 916269168fc3a6a7d555fd854be74e6bedd10837
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Sat Apr 11 17:18:26 2020 -0600
+
+    Revised test classes to pass, other than CTest
+
+commit bc98d59c434b430b8bb4cd3aeedbf5d49e822aa2
+Author: ColeCallihan <cacallihan@mymail.mines.edu>
+Date:   Sat Apr 11 16:12:45 2020 -0600
+
+    Finished C22, getting ready for final changes
+
+commit 6cca9f290479b672db086673ddaa20b3c6ddf067
+Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
+Date:   Wed Apr 8 20:28:12 2020 -0600
+
+    Updated the git log for C21A
+
 commit 1c20053ab9e642bdd9622d44ec3fefaad69f9211
 Author: Carter Pasqualini <cbpasqualini@mymail.mines.edu>
 Date:   Wed Apr 8 20:25:24 2020 -0600
