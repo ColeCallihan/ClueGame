@@ -127,26 +127,44 @@ public class BoardCell {
 		return initial;
 	}
 	
+	/*
+	 * Returns whether or not the board cell is going to display the room name
+	 */
 	public boolean isDisplayName() {
 		return displayName;
 	}
 
+	/*
+	 * Sets whether the board is going to display the room name or not
+	 */
 	public void setDisplayName(boolean displayName) {
 		this.displayName = displayName;
 	}
 	
+	/*
+	 * Sets the room name of the cell assumming it will print the room name
+	 */
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
 	}
 	
+	/*
+	 * Returns the room name of the board cell assuming it will print the name
+	 */
 	public String getRoomName() {
 		return roomName;
 	}
 	
+	/*
+	 * returns the cell width of the board cell
+	 */
 	public int getCellWidth() {
 		return cellWidth;
 	}
 	
+	/*
+	 * Returns the cell height of the board cell
+	 */
 	public int getCellHeight() {
 		return cellHeight;
 	}
@@ -186,6 +204,12 @@ public class BoardCell {
 		}
 		//If the cell is a door, it prints a blue line where the door is
 		else if(isDoorway()) {
+			if(isTarget) {
+				g.setColor(Color.CYAN);
+				g.fillRect(startX, startY, cellWidth, cellHeight);
+				g.setColor(Color.BLACK);
+				g.drawRect(startX, startY, cellWidth, cellHeight);
+			}
 			g.setColor(Color.BLUE);
 			switch (getDoorDirection()) {
 			case UP:
@@ -204,18 +228,30 @@ public class BoardCell {
 		}
 	}
 	
+	/*
+	 * Returns the x location of the upper left corner of the board cell
+	 */
 	public int getStartX() {
 		return startX;
 	}
 	
+	/*
+	 * Returns the y location of the upper left corner of the board cell
+	 */
 	public int getStartY() {
 		return startY;
 	}
 	
+	/*
+	 * Sets whether or not the board cell is a target, to be later displayed on the board
+	 */
 	public void setIsTarget(boolean targetValue) {
 		isTarget = targetValue;
 	}
 	
+	/*
+	 * Returns whether or not a boardCell is currently a highlighted target to be displayed on the board
+	 */
 	public boolean getIsTarget() {
 		return isTarget;
 	}

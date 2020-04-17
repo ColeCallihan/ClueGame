@@ -26,6 +26,7 @@ public class Board extends JPanel{
 	private int numColumns;
 	public final int MAX_BOARD_SIZE = 50;
 
+	//instance variables to keep track of the current player, guess, roll, and the result to answer the current guess
 	private int currentPlayer = -1;//-1 ensure at the start of the first turn, it always starts on player 0
 	private int currentRoll;
 	private Solution currentGuess;
@@ -715,57 +716,76 @@ public class Board extends JPanel{
 		}
 	}
 
+	/*
+	 * Starts and runs the turn of the current player
+	 * Rolls the dice, determines targets
+	 */
 	public void startNextTurn() {
 		rollDice();
 		calcTargets(getCellAt(players.get(currentPlayer).getRow(), players.get(currentPlayer).getColumn()), currentRoll);
 
+		//If the player is human, set the targets cells to be targets so they are drawn blue
 		if(players.get(currentPlayer).getStatus().equals("Human")) {
 			for(BoardCell target : targets) {
-				System.out.println(target.getStartX() + " " + target.getStartY() + " " + target.getCellWidth() + " " + target.getCellHeight());
+				//System.out.println(target.getStartX() + " " + target.getStartY() + " " + target.getCellWidth() + " " + target.getCellHeight());
 				target.setIsTarget(true);
 			}
-			this.repaint();
 
-			for(BoardCell target : targets) {
-				target.setIsTarget(false);
-			}
-
+			//if the player made it into a room, make a suggestion
 			if(players.get(currentPlayer).getCurrentRoom().isDoorway()) {
 				//make suggestion
 			}
 		}
 	}
 
+	/*
+	 * TargetListener class attached to the board to listen for clicks on valid target cells
+	 */
 	private class TargetListener implements MouseListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			//grabs the coordinates of the mouse click
 			int mouseX = e.getX();
 			int mouseY = e.getY();
 
+			boolean validClick = true;
+
+			//If it is the player's turn
+			//If it is not the player's turn, print an error messsage
 			if(players.get(currentPlayer).getStatus().equals("Human")) {
-				System.out.println("Human's turn");
-				if(players.get(currentPlayer).getDoneTurn() == true) {
+				//System.out.println("Human's turn");
+				
+				//If the player is not done with their turn, check if any targets were clicked
+				//If the player is done with their turn, do nothing
+				if(players.get(currentPlayer).getDoneTurn() == false) {
 					for(BoardCell target : targets) {
 						Rectangle rect = new Rectangle(target.getStartX(), target.getStartY(), target.getCellWidth(), target.getCellHeight());
 						if(rect.contains(new Point(mouseX, mouseY))) {
 							players.get(currentPlayer).makeMove(target);
+							for(BoardCell target1 : targets) {
+								target1.setIsTarget(false);
+							}
 							repaint();
-							System.out.println("Valid target");
-							advanceNextPlayer();
+							//System.out.println("Valid target");
+							validClick = true;
 							break;
 						}
 						else {
-							System.out.println("Invalid target selection");
+							validClick = false;
 						}
 					}
-				}
-				else {
-					System.out.println("Invalid target selection");
+					//If a target was not clicked, print an error message
+					if(validClick == false) {
+						JOptionPane splashScreen = new JOptionPane();
+						splashScreen.showMessageDialog(Board.getInstance(), "Invalid target selection. Please try again.", "Error", JOptionPane.INFORMATION_MESSAGE);
+						//System.out.println(Integer.toString(mouseX) + " " + Integer.toString(mouseY));
+					}
 				}
 			}
-			//JOptionPane splashScreen = new JOptionPane();
-			//splashScreen.showMessageDialog(, "Invalid target selection. Please try again.", "Error", JOptionPane.INFORMATION_MESSAGE);
-			//System.out.println(Integer.toString(mouseX) + " " + Integer.toString(mouseY));
+			else {
+				JOptionPane splashScreen = new JOptionPane();
+				splashScreen.showMessageDialog(Board.getInstance(), "Not your turn. Please advance to the next player.", "Error", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 
 		@Override
@@ -781,39 +801,63 @@ public class Board extends JPanel{
 		public void mouseExited(MouseEvent e) {}
 	}
 
-
+	/*
+	 * rolls a random number and sets the current roll
+	 */
 	public void rollDice() {
 		Random rand = new Random();
 		currentRoll = rand.nextInt(6) + 1;
 	}
 
+	/*
+	 * returns the name of the currentPlayer
+	 */
 	public String getCurrentPlayerName() {
 		return players.get(currentPlayer).getName();
 	}
 
+	/*
+	 * Returns the Player object for the current player
+	 */
 	public Player getCurrentPlayer() {
+		//If the game has just begun, just return the first player
 		if(currentPlayer == -1) {
 			return players.get(0);
 		}
 		return players.get(currentPlayer);
 	}
 
+	/*
+	 * Return the current guess
+	 */
 	public String getGuess() {
 		return currentGuess.person + " in the " + currentGuess.room + " with the " + currentGuess.weapon;
 	}
 
+	/*
+	 * Return the current guess result
+	 */
 	public String getGuessResult() {
 		return currentGuessResult.getCardName();
 	}
 
+	/*
+	 * Return the current roll
+	 */
 	public int getCurrentRoll() {
 		return currentRoll;
 	}
 
+	/*
+	 * Return the current index of the current player
+	 */
 	public int getCurrentPlayerIndex() {
 		return currentPlayer;
 	}
 
+	/*
+	 * Increment the current player to the next player
+	 */
 	public void advanceNextPlayer() {
 		currentPlayer++;
 		currentPlayer %= players.size();

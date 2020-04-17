@@ -33,6 +33,10 @@ public class HumanPlayer extends Player{
 		return null;
 	}
 	
+	/*
+	 * Sets the human player's location to the target that was passed in
+	 * Also sets the turn to be complete and changes their current
+	 */
 	@Override
 	public void makeMove(BoardCell target) {
 		this.setRow(target.getRow());
@@ -40,14 +44,20 @@ public class HumanPlayer extends Player{
 		Board board = Board.getInstance();
 		super.setCurrentRoom(board.getCellAt(this.getRow(), this.getColumn()));
 		setDoneTurn(true);
-		System.out.println("Yo, I moved");
+		//System.out.println("Yo, I moved");
 	}
 	
+	/*
+	 * returns whether the human player is done with their turn or not
+	 */
 	@Override
 	public boolean getDoneTurn() {
 		return doneTurn;
 	}
 	
+	/*
+	 * Sets the doneTurn boolean if the human player is done with their turn
+	 */
 	public void setDoneTurn(boolean done) {
 		doneTurn = done;
 	}

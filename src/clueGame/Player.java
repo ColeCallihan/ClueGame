@@ -21,6 +21,7 @@ public class Player {
 	private int column;
 	private Color color;
 	
+	//Instance variables to tell if the player is complete with their turn
 	protected boolean doneTurn = false;
 	
 	//Keeps track of the last room the player was in
@@ -212,19 +213,40 @@ public class Player {
 		return Board.getInstance().getCellAt(row, column);
 	}
 	
+	/*
+	 * Returns if the player is done with their turn
+	 */
 	public boolean getDoneTurn() {
 		return true;
 	}
+	
+	/*
+	 * Setter to set whether or not the player is done with their turn
+	 */
+	public void setDoneTurn(boolean isDone) {
+		doneTurn = isDone;
+	}
 
+	/*
+	 * Sets the current room of the player
+	 */
 	public void setCurrentRoom(BoardCell cellAt) {
 		currentRoom = cellAt;
 	}
 	
+	/*
+	 * Makes a basic makeMove method for the human player to override, passing in
+	 * a single target for the player to move to
+	 */
 	public void makeMove(BoardCell target) {
-		System.out.println("Wrong move");
+		//System.out.println("Wrong move");
 	}
 	
+	/*
+	 * Makes a basic makeMove method for the computer player to override, passing in
+	 * the list of targets for the player to move to
+	 */
 	public void makeMove(Set<BoardCell> targets) {
-		System.out.println("Wrong move");
+		//System.out.println("Wrong move");
 	}
 }

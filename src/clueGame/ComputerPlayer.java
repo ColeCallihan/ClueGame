@@ -104,24 +104,32 @@ public class ComputerPlayer extends Player{
 	 */
 	public void makeAccusation(String person, String weapon, String room) {
 		boolean matchesSolution = Board.getInstance().checkAccusation(new Solution(person, weapon, room));
+		//Ends the game
 	}
 
+	/*
+	 * Override the makeMove method from player.
+	 * Makes the computer player pick a location from the list of targets
+	 * then sets the computer player's current room, previous room, new location, and makes their suggestion
+	 * if they are now in a room.
+	 */
 	@Override
 	public void makeMove(Set<BoardCell> targets) {
 		BoardCell newLocation = pickLocation(targets);
 		BoardCell lastRoom = super.getCurrentRoom();
 		
-		System.out.println("about to move " + getName());
+		//System.out.println("about to move " + getName());
 
 		if(newLocation.isDoorway()) {
 			setPrevRoom(newLocation);
+			//make suggestion
 		}
 
 		this.setRow(newLocation.getRow());
 		this.setColumn(newLocation.getColumn());
 		Board board = Board.getInstance();
 		super.setCurrentRoom(board.getCellAt(this.getRow(), this.getColumn()));
-		System.out.println("Computer player moved");
+		//System.out.println("Computer player moved");
 	}
 
 }
