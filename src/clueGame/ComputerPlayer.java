@@ -14,7 +14,9 @@ import java.util.function.BooleanSupplier;
 import java.util.Random;
 
 public class ComputerPlayer extends Player{
-	
+
+
+
 	/*
 	 * ComputerPlayer constructor that calls super constructor, setting the names, color, status, row, and column
 	 */
@@ -28,14 +30,14 @@ public class ComputerPlayer extends Player{
 	public ComputerPlayer() {
 		super();
 	}
-	
+
 	/*
 	 * Same as createSuggestion method in the instructors UML Diagram
 	 * Constructs a solution that becomes an accusation when the computer has narrowed down the solution
 	 * Becomes a suggestion otherwise
 	 */
 	public Solution generateSolution() {
-		
+
 		//If the computer player has narrowed down to the solution, they will make an accusation, ending the game.
 		//A null will never be returned assuming they narrowed down the solution properly
 		if(suspectPeople.size() == 1 && suspectWeapons.size() == 1 & suspectRooms.size() == 1) {
@@ -50,7 +52,7 @@ public class ComputerPlayer extends Player{
 			String guessPerson = suspectPeople.get(guessPersonIndex).getCardName();
 			int guessWeaponIndex = rand.nextInt(suspectWeapons.size());
 			String guessWeapon = suspectWeapons.get(guessWeaponIndex).getCardName();
-			
+
 			return new Solution(guessPerson, guessWeapon, guessRoom);
 		}
 	}
@@ -60,15 +62,20 @@ public class ComputerPlayer extends Player{
 	 */
 	public BoardCell pickLocation(Set<BoardCell> targets) {
 		ArrayList<BoardCell> roomList = new ArrayList<BoardCell>();
-		
+
 		for(BoardCell currentTarget : targets) {
 			if(currentTarget.isDoorway()) {
 				roomList.add(currentTarget);
-;			}
+			}
 		}
-		
-		roomList.remove(prevRoom);
-		
+		if(prevRoom != null) {
+			for(BoardCell target : targets) {
+				if(target.isDoorway() && prevRoom.isDoorway() && prevRoom.getInitial() == target.getInitial()) {
+					roomList.remove(target);
+				}
+			}
+		}
+
 		Random rand = new Random();
 		//If the roomList does not contain any new rooms, pick a random target from the HashSet
 		if(roomList.isEmpty() == true) {
@@ -98,4 +105,23 @@ public class ComputerPlayer extends Player{
 	public void makeAccusation(String person, String weapon, String room) {
 		boolean matchesSolution = Board.getInstance().checkAccusation(new Solution(person, weapon, room));
 	}
+
+	@Override
+	public void makeMove(Set<BoardCell> targets) {
+		BoardCell newLocation = pickLocation(targets);
+		BoardCell lastRoom = super.getCurrentRoom();
+		
+		System.out.println("about to move " + getName());
+
+		if(newLocation.isDoorway()) {
+			setPrevRoom(newLocation);
+		}
+
+		this.setRow(newLocation.getRow());
+		this.setColumn(newLocation.getColumn());
+		Board board = Board.getInstance();
+		super.setCurrentRoom(board.getCellAt(this.getRow(), this.getColumn()));
+		System.out.println("Computer player moved");
+	}
+
 }

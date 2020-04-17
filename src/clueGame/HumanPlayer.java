@@ -7,10 +7,11 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.event.MouseListener;
 import java.util.Set;
 
 public class HumanPlayer extends Player{
-
+	
 	/*
 	 * HumanPlayer constructor that calls the super constructor to set the HumanPlayer name, color, status, row, and column
 	 */
@@ -32,11 +33,22 @@ public class HumanPlayer extends Player{
 		return null;
 	}
 	
-	/*
-	 * To be implemented
-	 */
-	public BoardCell pickLocation(Set<BoardCell> targets) {
-		
-		return null;
+	@Override
+	public void makeMove(BoardCell target) {
+		this.setRow(target.getRow());
+		this.setColumn(target.getColumn());
+		Board board = Board.getInstance();
+		super.setCurrentRoom(board.getCellAt(this.getRow(), this.getColumn()));
+		setDoneTurn(true);
+		System.out.println("Yo, I moved");
+	}
+	
+	@Override
+	public boolean getDoneTurn() {
+		return doneTurn;
+	}
+	
+	public void setDoneTurn(boolean done) {
+		doneTurn = done;
 	}
 }

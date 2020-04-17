@@ -69,7 +69,7 @@ public class CardControlPanel extends JPanel {
 		for(int i = 0; i < cards.size(); i++) {
 			JTextField dispText = new JTextField();
 			dispText.setEditable(false);
-			dispText.setPreferredSize(new Dimension(100,100));
+			dispText.setPreferredSize(new Dimension(110,50));
 			dispText.setText(cards.get(i).getCardName());
 			dispText.setHorizontalAlignment(JTextField.CENTER);
 			wepPane.add(dispText);
@@ -80,7 +80,7 @@ public class CardControlPanel extends JPanel {
 
 	//Creates the room cards to display to the player
 	private JPanel createRooms(ArrayList<Card> cards) {
-		//JPanel for roooms
+		//JPanel for rooms
 		JPanel roomPane = new JPanel();
 		roomPane.setBorder(new TitledBorder(new EtchedBorder(),"Rooms"));
 
@@ -88,7 +88,7 @@ public class CardControlPanel extends JPanel {
 		for(int i = 0; i < cards.size(); i++) {
 			JTextField dispText = new JTextField();
 			dispText.setEditable(false);
-			dispText.setPreferredSize(new Dimension(100,100));
+			dispText.setPreferredSize(new Dimension(110,50));
 			dispText.setText(cards.get(i).getCardName());
 			dispText.setHorizontalAlignment(JTextField.CENTER);
 			roomPane.add(dispText);
@@ -99,7 +99,7 @@ public class CardControlPanel extends JPanel {
 
 	//Creates the people cards to display to the player
 	private JPanel createPeople(ArrayList<Card> cards) {
-		//JPanel for roooms
+		//JPanel for rooms
 		JPanel peepsPane = new JPanel();
 		peepsPane.setBorder(new TitledBorder(new EtchedBorder(),"People"));
 
@@ -107,7 +107,7 @@ public class CardControlPanel extends JPanel {
 		for(int i = 0; i < cards.size(); i++) {
 			JTextField dispText = new JTextField();
 			dispText.setEditable(false);
-			dispText.setPreferredSize(new Dimension(100,100));
+			dispText.setPreferredSize(new Dimension(110,50));
 			dispText.setText(cards.get(i).getCardName());
 			dispText.setHorizontalAlignment(JTextField.CENTER);
 			peepsPane.add(dispText);
@@ -115,7 +115,4 @@ public class CardControlPanel extends JPanel {
 
 		return peepsPane;
 	}
-
-
-
 }

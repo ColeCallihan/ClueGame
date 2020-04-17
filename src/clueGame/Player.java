@@ -21,6 +21,8 @@ public class Player {
 	private int column;
 	private Color color;
 	
+	protected boolean doneTurn = false;
+	
 	//Keeps track of the last room the player was in
 	protected BoardCell prevRoom;
 	protected BoardCell currentRoom;
@@ -175,7 +177,7 @@ public class Player {
 	/*
 	 * Sets the player's previous room to the room they were in before they moved out
 	 */
-	public void setPrevLocation(BoardCell previous) {
+	public void setPrevRoom(BoardCell previous) {
 		prevRoom = previous;
 	}
 	
@@ -210,13 +212,19 @@ public class Player {
 		return Board.getInstance().getCellAt(row, column);
 	}
 	
-	/*
-	 * Equals method to compare players by their type and name
-	 */
-	//public boolean equals(Player comparePlayer) {
-	//	if(comparePlayer.getName().equals(this.getName()) && comparePlayer.getStatus().contentEquals(this.getStatus()){
-	//		return true;
-	//	}
-	//	return false;
-	//}
+	public boolean getDoneTurn() {
+		return true;
+	}
+
+	public void setCurrentRoom(BoardCell cellAt) {
+		currentRoom = cellAt;
+	}
+	
+	public void makeMove(BoardCell target) {
+		System.out.println("Wrong move");
+	}
+	
+	public void makeMove(Set<BoardCell> targets) {
+		System.out.println("Wrong move");
+	}
 }

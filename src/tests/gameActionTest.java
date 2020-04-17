@@ -96,7 +96,7 @@ class gameActionTest {
 		
 		
 		//if room just visited is in list, each target (including room) selected randomly
-		player.setPrevLocation(board.getCellAt(player.getRow(), player.getColumn()));
+		player.setPrevRoom(board.getCellAt(player.getRow(), player.getColumn()));
 		board.calcTargets(14,20,1);
 		boolean loc_14_19 = false;
 		boolean loc_14_21 = false;

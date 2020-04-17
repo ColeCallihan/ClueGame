@@ -15,10 +15,14 @@ public class BoardCell {
 	private int cellWidth = 19;
 	private int cellHeight = 19;
 	private int column;
+	private int startX;
+	private int startY;
+	
 	private char initial;
 	private String roomName;
 	private DoorDirection doordir;
 	private boolean displayName = false;
+	private boolean isTarget = false;
 
 	/*
 	 * Constructor that sets the row and column of the BoardCell to zero by default
@@ -162,12 +166,15 @@ public class BoardCell {
 	 */
 	public void draw(Graphics g) {
 		//Calculates the pixel placement of each boardCell
-		int startY = row * cellHeight;
-		int startX = column * cellWidth;
+		startY = row * cellHeight;
+		startX = column * cellWidth;
 		
 		//If the cell is a walkway, it is printed yellow with a border
 		if(isWalkway()) {
 			g.setColor(Color.YELLOW);
+			if(isTarget) {
+				g.setColor(Color.CYAN);
+			}
 			g.fillRect(startX, startY, cellWidth, cellHeight);
 			g.setColor(Color.BLACK);
 			g.drawRect(startX, startY, cellWidth, cellHeight);
@@ -195,5 +202,21 @@ public class BoardCell {
 				break;
 			}
 		}
+	}
+	
+	public int getStartX() {
+		return startX;
+	}
+	
+	public int getStartY() {
+		return startY;
+	}
+	
+	public void setIsTarget(boolean targetValue) {
+		isTarget = targetValue;
+	}
+	
+	public boolean getIsTarget() {
+		return isTarget;
 	}
 }

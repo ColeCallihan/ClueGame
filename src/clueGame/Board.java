@@ -7,11 +7,16 @@ package clueGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Board extends JPanel{
@@ -20,6 +25,11 @@ public class Board extends JPanel{
 	private int numRows;
 	private int numColumns;
 	public final int MAX_BOARD_SIZE = 50;
+
+	private int currentPlayer = -1;//-1 ensure at the start of the first turn, it always starts on player 0
+	private int currentRoll;
+	private Solution currentGuess;
+	private Card currentGuessResult;
 
 	//instance variables of lists of players and cards
 	private ArrayList<Player> players = new ArrayList<Player>();
@@ -55,6 +65,7 @@ public class Board extends JPanel{
 	// constructor is private to ensure only one can be created
 	private Board() {
 		super();
+		addMouseListener(new TargetListener());
 	}
 
 	/*
@@ -449,7 +460,14 @@ public class Board extends JPanel{
 			int playerRow = Integer.parseInt(playerDetails[3]);
 			int playerColumn = Integer.parseInt(playerDetails[4]);
 
-			Player newPlayer = new Player(playerName, playerColor, playerStatus, playerRow, playerColumn);
+			Player newPlayer;
+
+			if(playerStatus.equals("Human")) {
+				newPlayer = new HumanPlayer(playerName, playerColor, playerStatus, playerRow, playerColumn);
+			}
+			else {
+				newPlayer = new ComputerPlayer(playerName, playerColor, playerStatus, playerRow, playerColumn);
+			}
 			players.add(newPlayer);
 		}
 	}
@@ -664,15 +682,15 @@ public class Board extends JPanel{
 		//Sets the answer
 		theAnswer = new Solution(currentSolutionPersonCard.getCardName(), currentSolutionWeaponCard.getCardName(), currentSolutionRoomCard.getCardName());
 	}
-	
+
 	/*
 	 * Prints the entire board when it is called to be drawn in the GUI
-	 * It printes each boardCell and player
+	 * It prints each boardCell and player
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		//Sets the background color for the rooms then printes each BoardCell that is a Walkway
+
+		//Sets the background color for the rooms then prints each BoardCell that is a Walkway
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 552, 552);
 		for(int i = 0; i < board.length; i++) {
@@ -680,20 +698,124 @@ public class Board extends JPanel{
 				board[i][j].draw(g);
 			}
 		}
-		
+
 		//Iterates through every player and draws them on the board
 		for(Player currentPlayer : players) {
 			Color currentColor = currentPlayer.getColor();
 			g.setColor(currentColor);//test
-			
+
 			int currentRow = currentPlayer.getRow();
 			int currentCol = currentPlayer.getColumn();
 			int cellWidth = board[currentRow][currentCol].getCellWidth();
 			int cellHeight = board[currentRow][currentCol].getCellHeight();
 			int startY = currentRow * board[currentRow][currentCol].getCellHeight();
 			int startX = currentCol * board[currentRow][currentCol].getCellWidth();
-			
+
 			g.fillOval(startX, startY, cellWidth, cellHeight);
 		}
+	}
+
+	public void startNextTurn() {
+		rollDice();
+		calcTargets(getCellAt(players.get(currentPlayer).getRow(), players.get(currentPlayer).getColumn()), currentRoll);
+
+		if(players.get(currentPlayer).getStatus().equals("Human")) {
+			for(BoardCell target : targets) {
+				System.out.println(target.getStartX() + " " + target.getStartY() + " " + target.getCellWidth() + " " + target.getCellHeight());
+				target.setIsTarget(true);
+			}
+			this.repaint();
+
+			for(BoardCell target : targets) {
+				target.setIsTarget(false);
+			}
+
+			if(players.get(currentPlayer).getCurrentRoom().isDoorway()) {
+				//make suggestion
+			}
+		}
+	}
+
+	private class TargetListener implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int mouseX = e.getX();
+			int mouseY = e.getY();
+
+			if(players.get(currentPlayer).getStatus().equals("Human")) {
+				System.out.println("Human's turn");
+				if(players.get(currentPlayer).getDoneTurn() == true) {
+					for(BoardCell target : targets) {
+						Rectangle rect = new Rectangle(target.getStartX(), target.getStartY(), target.getCellWidth(), target.getCellHeight());
+						if(rect.contains(new Point(mouseX, mouseY))) {
+							players.get(currentPlayer).makeMove(target);
+							repaint();
+							System.out.println("Valid target");
+							advanceNextPlayer();
+							break;
+						}
+						else {
+							System.out.println("Invalid target selection");
+						}
+					}
+				}
+				else {
+					System.out.println("Invalid target selection");
+				}
+			}
+			//JOptionPane splashScreen = new JOptionPane();
+			//splashScreen.showMessageDialog(, "Invalid target selection. Please try again.", "Error", JOptionPane.INFORMATION_MESSAGE);
+			//System.out.println(Integer.toString(mouseX) + " " + Integer.toString(mouseY));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+
+		@Override
+		public void mouseExited(MouseEvent e) {}
+	}
+
+
+	public void rollDice() {
+		Random rand = new Random();
+		currentRoll = rand.nextInt(6) + 1;
+	}
+
+	public String getCurrentPlayerName() {
+		return players.get(currentPlayer).getName();
+	}
+
+	public Player getCurrentPlayer() {
+		if(currentPlayer == -1) {
+			return players.get(0);
+		}
+		return players.get(currentPlayer);
+	}
+
+	public String getGuess() {
+		return currentGuess.person + " in the " + currentGuess.room + " with the " + currentGuess.weapon;
+	}
+
+	public String getGuessResult() {
+		return currentGuessResult.getCardName();
+	}
+
+	public int getCurrentRoll() {
+		return currentRoll;
+	}
+
+	public int getCurrentPlayerIndex() {
+		return currentPlayer;
+	}
+
+	public void advanceNextPlayer() {
+		currentPlayer++;
+		currentPlayer %= players.size();
 	}
 }

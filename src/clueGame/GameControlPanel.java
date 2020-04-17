@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,6 +22,17 @@ import javax.swing.border.TitledBorder;
 
 public class GameControlPanel extends JPanel {
 
+	private static String currentPlayerName = "";
+	
+	Board board = Board.getInstance();
+	
+	private JButton nextPlayer;
+	private JButton makeAccusation;
+	private static JTextField turnText;
+	private static JTextField dieText;
+	private static JTextField guessText;
+	private static JTextField guessResultText;
+	
 	//Adds components to the window
 	public GameControlPanel()
 	{
@@ -45,15 +58,15 @@ public class GameControlPanel extends JPanel {
 		upperButtonsAndTurn.add(panel);
 
 		//Creates buttons to add to the upper panel
-		JButton currentButton = new JButton();
+		JButton playerButton = new JButton();
 
 		//Adding next player button
-		currentButton = createButtonPanelPlayer();
-		upperButtonsAndTurn.add(currentButton);
+		playerButton = createButtonPanelPlayer();
+		upperButtonsAndTurn.add(playerButton);
 		
 		//Adding the accusation button
-		currentButton = createButtonPanelAccusation();
-		upperButtonsAndTurn.add(currentButton);
+		JButton accusationButton = createButtonPanelAccusation();
+		upperButtonsAndTurn.add(accusationButton);
 		
 		//Adds buttons to the upper panel
 		outerTwoRows.add(upperButtonsAndTurn);
@@ -86,11 +99,12 @@ public class GameControlPanel extends JPanel {
 		//Initial Constructors
 		JLabel whoseTurn = new JLabel("Whose Turn?");
 		JPanel panel = new JPanel();
-		JTextField text = new JTextField();
+		turnText = new JTextField();
 		
 		//Setting size and text box preferences
-		text.setPreferredSize(new Dimension(150, 100));
-		text.setEditable(false);
+		turnText.setPreferredSize(new Dimension(150, 100));
+		turnText.setEditable(false);
+		turnText.setText(currentPlayerName);
 		
 		//Setting dimensions
 		panel.setLayout(new BorderLayout());
@@ -98,7 +112,7 @@ public class GameControlPanel extends JPanel {
 		
 		//Adding label to panel to be returned above text box
 		panel.add(whoseTurn, BorderLayout.NORTH);
-		panel.add(text);
+		panel.add(turnText);
 		
 		return panel;
 	}
@@ -109,18 +123,18 @@ public class GameControlPanel extends JPanel {
 		//Initial Constructors
 		JLabel label = new JLabel("Roll");
 		JPanel panel = new JPanel();
-		JTextField text = new JTextField();
+		dieText = new JTextField();
 		
 		//Settings dimensions and size
-		text.setPreferredSize(new Dimension(50, 20));
-		text.setEditable(false);
+		dieText.setPreferredSize(new Dimension(50, 20));
+		dieText.setEditable(false);
 		
 		//Setting Border Label
 		panel.setBorder(new TitledBorder(new EtchedBorder(),"Die"));
 		
 		//Adding to return panel
 		panel.add(label);
-		panel.add(text);
+		panel.add(dieText);
 		
 		return panel;
 	}
@@ -132,18 +146,18 @@ public class GameControlPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		panel.setPreferredSize(new Dimension(300, 80));
-		JTextField text = new JTextField();
+		guessText = new JTextField();
 		
 		//Settings dimensions and size
-		text.setPreferredSize(new Dimension(500, 25));
-		text.setEditable(false);
+		guessText.setPreferredSize(new Dimension(500, 25));
+		guessText.setEditable(false);
 		
 		//Setting Border Label
 		panel.setBorder(new TitledBorder(new EtchedBorder(),"Guess"));
 		
 		//Adding to return panel
 		panel.add(label, BorderLayout.CENTER);
-		panel.add(text, BorderLayout.SOUTH);
+		panel.add(guessText, BorderLayout.SOUTH);
 		return panel;
 	}
 	
@@ -153,18 +167,18 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Response");
 		JPanel panel = new JPanel();
 		panel.setPreferredSize(new Dimension(300, 60));
-		JTextField text = new JTextField();
+		guessResultText = new JTextField();
 		
 		//Settings dimensions and size
-		text.setPreferredSize(new Dimension(150, 25));
-		text.setEditable(false);
+		guessResultText.setPreferredSize(new Dimension(150, 25));
+		guessResultText.setEditable(false);
 		
 		//Setting Border Label
 		panel.setBorder(new TitledBorder(new EtchedBorder(),"Guess Result"));
 		
 		//Adding to return panel
 		panel.add(label);
-		panel.add(text);
+		panel.add(guessResultText);
 		
 		return panel;
 		
@@ -173,25 +187,62 @@ public class GameControlPanel extends JPanel {
 	//Creates the buttons
 	private JButton createButtonPanelPlayer() {
 		//Initial Constructors
-		JButton nextPlayer = new JButton("Next player");
-		//JPanel panel = new JPanel();
+		nextPlayer = new JButton("Next player");
 		
-		//Setting button dimensions
-		//nextPlayer.setPreferredSize(new Dimension(150, 80));
+		class NextPlayerButtonListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				if(board.getCurrentPlayer().getStatus().equals("Human")) {
+					if(board.getCurrentPlayerIndex() == -1) {
+						board.advanceNextPlayer();
+						board.startNextTurn();
+						updatePanelDiceAndPlayer();
+						if(board.getCurrentPlayer().getStatus().equals("Human")){
+							board.repaint();
+							//suggestion possibility
+							
+						}
+						//updatePanelGuessAndResult();
+					}
+					else if(board.getCurrentPlayer().getDoneTurn() == false) {
+						System.out.println("You cannot advance to next player yet");
+					}
+					else {
+						board.advanceNextPlayer();
+						board.startNextTurn();
+						updatePanelDiceAndPlayer();
+						if(board.getCurrentPlayer().getStatus().equals("Human")){
+							board.repaint();
+							//suggestion possibility
+							
+						}
+						//updatePanelGuessAndResult();
+						System.out.println(board.getCurrentPlayerIndex());
+					}
+				}
+				else {
+					if(board.getCurrentPlayer().getStatus().equals("Computer")) {
+						board.startNextTurn();
+						System.out.println(board.getCurrentPlayerIndex());
+						System.out.println("current player is" + board.getPlayers().get(board.getCurrentPlayerIndex()));
+						updatePanelDiceAndPlayer();
+						board.getCurrentPlayer().makeMove(board.getTargets());
+						board.repaint();
+						//updatePanelGuessAndResult();
+						board.advanceNextPlayer();
+					}
+				}
+			}
+		}
+		board.repaint();
 		
-		//Making sure buttons are side by side
-		//panel.setLayout(new GridLayout(1,2));
-		//panel.setPreferredSize(new Dimension(400, 100));
-		
-		//Adding to return panel
-		//panel.add(nextPlayer);
+		nextPlayer.addActionListener(new NextPlayerButtonListener());
 		
 		return nextPlayer;
 	}
 	
 	private JButton createButtonPanelAccusation() {
 		//Initial Constructors
-		JButton makeAccusation = new JButton("Make an accusation");
+		makeAccusation = new JButton("Make an accusation");
 		//JPanel panel = new JPanel();
 		
 		//Setting button dimensions
@@ -220,5 +271,29 @@ public class GameControlPanel extends JPanel {
 		frame.setVisible(true);
 	}
 
+	public static void setTurnText(String playerName) {
+		turnText.setText(playerName);
+	}
+	
+	public static void setGuessText(String playerGuess) {
+		guessText.setText(playerGuess);
+	}
+	
+	public static void setGuessResultText(String playerGuess) {
+		guessResultText.setText(playerGuess);
+	}
 
+	public static void setDieText(int dieRoll) {
+		dieText.setText(Integer.toString(dieRoll));
+	}
+	
+	public void updatePanelGuessAndResult() {
+		setGuessText(board.getGuess());
+		setGuessResultText(board.getGuessResult());
+	}
+	
+	public void updatePanelDiceAndPlayer() {
+		setDieText(board.getCurrentRoll());
+		setTurnText(board.getCurrentPlayerName());
+	}
 }

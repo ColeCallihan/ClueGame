@@ -1,5 +1,5 @@
 /*
- * @authors Cole Callihan, Carter Pasqualini
+cd * @authors Cole Callihan, Carter Pasqualini
  * 
  * ClueGame runs the GUI that manages and displays game interactions
  */
@@ -22,16 +22,12 @@ public class ClueGame extends JFrame{
 	private DetectiveNotes playerNotes;
 	private GameControlPanel controlPanel;
 	private CardControlPanel cardPanel;
-	Board board;
+	static Board board;
 	
 	/*
 	 * Constructor for ClueGame. Creates all of the panels, windows, and sets config files
 	 */
-	public ClueGame() {
-		//Creating splash screen for once you enter the game
-		JOptionPane splashScreen = new JOptionPane();
-		splashScreen.showMessageDialog(this, "You are Spock, press Next Player to begin play", "Welcome to Space Clue", JOptionPane.INFORMATION_MESSAGE);
-		
+	public ClueGame() {	
 		//Sets preferences for the JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Clue Game");
@@ -110,6 +106,11 @@ public class ClueGame extends JFrame{
 		// Create the JFrame
 		ClueGame frame = new ClueGame();
 		frame.setVisible(true);
+		
+		//Creating splash screen for once you enter the game	
+		JOptionPane splashScreen = new JOptionPane();
+		splashScreen.showMessageDialog(frame, "You are " + board.getPlayers().get(0).getName() + ", press Next Player to begin play", "Welcome to Space Clue", JOptionPane.INFORMATION_MESSAGE);
+				
 	}
 
 }
