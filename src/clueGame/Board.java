@@ -6,9 +6,13 @@
 package clueGame;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
@@ -16,11 +20,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Board extends JPanel{
 
+	//Buttons
+	private JButton submit;
+	private JButton cancel;
+	
 	//instance variables for integers that keep track of the board columns, rows, and max board size
 	private int numRows;
 	private int numColumns;
@@ -58,6 +70,7 @@ public class Board extends JPanel{
 	private String roomConfigFile;
 	private String playerConfigFile;
 	private String cardConfigFile;
+	public boolean playerGuessMade = false;
 	public static Solution theAnswer;
 
 	// variable used for singleton pattern
@@ -84,8 +97,8 @@ public class Board extends JPanel{
 		try {
 			loadRoomConfig();
 			loadBoardConfig();
-			loadPeople();
 			loadCards();
+			loadPeople();
 			dealCards();
 
 		}catch(BadConfigFormatException e) {
@@ -631,6 +644,7 @@ public class Board extends JPanel{
 	 */
 	public Card handleSuggestion(Solution solution, Player player1) {
 		int currentPlayerIndex = players.indexOf(player1);
+		currentGuess = solution;
 		Card answer = null;
 
 		//iterates to each player until either every player was tested or a player has a card to disprove the solution
@@ -638,11 +652,18 @@ public class Board extends JPanel{
 			currentPlayerIndex++;
 			currentPlayerIndex %= players.size();
 			if(currentPlayerIndex == players.indexOf(player1)) {
+				//Change result to null if no one can disprove
+				currentGuessResult = null;
 				return null;
 			}
 			else if(players.get(currentPlayerIndex).disproveSuggestion(solution) != null) {
 				answer = players.get(currentPlayerIndex).disproveSuggestion(solution);
+				currentGuessResult = answer;
 				return answer;
+			}
+			else
+			{
+				currentGuessResult = null;
 			}
 		}
 	}
@@ -651,10 +672,58 @@ public class Board extends JPanel{
 	 * Returns whether or not the accusation matched the solution
 	 */
 	public boolean checkAccusation(Solution testSolution) {
+		//If it is true
 		if(Board.theAnswer.person.equals(testSolution.person) && Board.theAnswer.weapon.equals(testSolution.weapon) && Board.theAnswer.room.equals(testSolution.room)) {
+			
+			//Making dialog for win screen
+			JDialog winScreen = new JDialog();
+			JPanel panel = new JPanel();
+			JLabel win = new JLabel("Congratulations! " + getCurrentPlayer().getName() + " has figured out the solution!");
+			JButton okWin = new JButton("OK!");
+			
+			winScreen.setSize(new Dimension(500, 625));
+			
+			panel.add(win);
+			panel.add(okWin);
+			winScreen.add(panel);
+			winScreen.setTitle("Game Over!");
+			
+			//Add action listener to end the game
+			class WinButtonListener implements ActionListener{
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			}
+			okWin.addActionListener(new WinButtonListener());
+			winScreen.setVisible(true);
+
+			
 			return true;
 		}
 		else {
+			//If they are incorrect, continue game but let them know
+			JDialog incorrectScreen = new JDialog();
+			JPanel panel = new JPanel();
+			JLabel lose = new JLabel("Sorry that is not the correct solution.");
+			JButton okLose = new JButton("OK!");
+			
+			incorrectScreen.setSize(new Dimension(500, 625));
+			
+			panel.add(lose);
+			panel.add(okLose);
+			incorrectScreen.add(panel);
+			incorrectScreen.setTitle("Incorrect Accusation");
+			
+			//Making sure they know they are a loser
+			class LoseButtonListener implements ActionListener{
+				public void actionPerformed(ActionEvent e) {
+					getCurrentPlayer().setStartTurn(false);
+					incorrectScreen.setVisible(false);
+				}
+			}
+			okLose.addActionListener(new LoseButtonListener());
+			incorrectScreen.setVisible(true);
+			
 			return false;
 		}
 	}
@@ -780,6 +849,9 @@ public class Board extends JPanel{
 						splashScreen.showMessageDialog(Board.getInstance(), "Invalid target selection. Please try again.", "Error", JOptionPane.INFORMATION_MESSAGE);
 						//System.out.println(Integer.toString(mouseX) + " " + Integer.toString(mouseY));
 					}
+					if(players.get(currentPlayer).getCurrentRoom().isDoorway()) {
+						getSuggestionFromPlayer(players.get(currentPlayer).getCurrentRoom());
+					}
 				}
 			}
 			else {
@@ -831,6 +903,9 @@ public class Board extends JPanel{
 	 * Return the current guess
 	 */
 	public String getGuess() {
+		if(currentGuess == null) {
+			return null;
+		}
 		return currentGuess.person + " in the " + currentGuess.room + " with the " + currentGuess.weapon;
 	}
 
@@ -838,6 +913,9 @@ public class Board extends JPanel{
 	 * Return the current guess result
 	 */
 	public String getGuessResult() {
+		if(currentGuessResult == null) {
+			return null;
+		}
 		return currentGuessResult.getCardName();
 	}
 
@@ -861,5 +939,177 @@ public class Board extends JPanel{
 	public void advanceNextPlayer() {
 		currentPlayer++;
 		currentPlayer %= players.size();
+	}
+	//This will create the guess box for the player and stores and tests guess
+	public void getSuggestionFromPlayer(BoardCell currentRoom) {
+		JDialog suggestionBox = new JDialog();
+		
+		//Making a guess
+		suggestionBox.setTitle("Make A Guess");
+		suggestionBox.setSize(new Dimension(500, 625));
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(4,2));
+		
+		//Making the dialog popup box
+		JLabel yourRoom = new JLabel("Your Room");
+		JLabel personLabel = new JLabel("Person");
+		JLabel weaponLabel = new JLabel("Weapon");
+		
+		JComboBox<String> rooms = new JComboBox<String>();
+		rooms.addItem(legend.get(currentRoom.getInitial()));
+		
+		//Filling in all of the people
+		JComboBox<String> people = new JComboBox<String>();
+		
+		for(Card card : getPlayerCards()) {
+			people.addItem(card.getCardName());
+		}
+		
+		JComboBox<String> weapons = new JComboBox<String>();
+		
+		//Filling in all of the weapons
+		for(Card card : getWeaponCards()) {
+			weapons.addItem(card.getCardName());
+		}
+		
+		//Making the buttons
+		submit = new JButton("Submit");
+		cancel = new JButton("Cancel");
+		
+		//Adding it to panel
+		panel.add(yourRoom);
+		panel.add(rooms);
+		panel.add(personLabel);
+		panel.add(people);
+		panel.add(weaponLabel);
+		panel.add(weapons);
+		panel.add(submit);
+		panel.add(cancel);
+		
+		//Adding it to JDialog Box
+		suggestionBox.add(panel);
+		suggestionBox.setVisible(true);
+		
+		//If they click submit
+		class SubmitButtonListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				
+				//Create suggestion made by player
+				String personGuess = (String) people.getSelectedItem();
+				String weaponsGuess = (String) weapons.getSelectedItem();
+				
+				Solution playerSolution = new Solution(personGuess, weaponsGuess, legend.get(currentRoom.getInitial()));
+				
+				//Check said suggestion
+				handleSuggestion(playerSolution, getCurrentPlayer());
+				
+				//Close the window and update GUI
+				GameControlPanel.updatePanelGuessAndResult();
+				players.get(currentPlayer).setDoneTurn(true);
+				suggestionBox.setVisible(false);
+			}
+		}
+		//If they click cancel
+		class CancelButtonListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				//No suggestion made
+				players.get(currentPlayer).setDoneTurn(true);
+				suggestionBox.setVisible(false);
+			}
+		}
+		//Making sure the buttons function
+		submit.addActionListener(new SubmitButtonListener());
+		cancel.addActionListener(new CancelButtonListener());
+		
+	}
+	//Takes accusation and checks it only if they are human and it is the beginning of their turn
+	public void getAccusationFromPlayer() {
+		//Only allows accusation from player if they are human
+		if(getCurrentPlayer().getStatus().equals("Human") && getCurrentPlayer().getStartTurn()) {
+
+			JDialog suggestionBox = new JDialog();
+
+			//Making the title and size
+			suggestionBox.setTitle("Make A Guess");
+			suggestionBox.setSize(new Dimension(500, 625));
+
+			JPanel panel = new JPanel();
+			panel.setLayout(new GridLayout(4,2));
+
+			//Creating options
+			JLabel yourRoom = new JLabel("Your Room");
+			JLabel personLabel = new JLabel("Person");
+			JLabel weaponLabel = new JLabel("Weapon");
+
+			JComboBox<String> rooms = new JComboBox<String>();
+
+			//Filling in all of the rooms
+			for(Card card : getRoomCards()) {
+				rooms.addItem(card.getCardName());
+			}
+			//Filling in all of the people
+			JComboBox<String> people = new JComboBox<String>();
+
+			for(Card card : getPlayerCards()) {
+				people.addItem(card.getCardName());
+			}
+			//Filling in all of the weapons
+			JComboBox<String> weapons = new JComboBox<String>();
+
+			for(Card card : getWeaponCards()) {
+				weapons.addItem(card.getCardName());
+			}
+
+			//Making the two buttons
+			JButton submit = new JButton("Submit");
+			JButton cancel = new JButton("Cancel");
+
+			//adding it to the jpanel
+			panel.add(yourRoom);
+			panel.add(rooms);
+			panel.add(personLabel);
+			panel.add(people);
+			panel.add(weaponLabel);
+			panel.add(weapons);
+			panel.add(submit);
+			panel.add(cancel);
+
+			//adding the panel to jdialog
+			suggestionBox.add(panel);
+			suggestionBox.setVisible(true);
+
+			//if they click submit
+			class SubmitButtonListener implements ActionListener{
+				public void actionPerformed(ActionEvent e) {
+					//create solution
+					String personGuess = (String) people.getSelectedItem();
+					String weaponsGuess = (String) weapons.getSelectedItem();
+					String roomGuess = (String) rooms.getSelectedItem();
+
+					//check solution
+					Solution playerSol = new Solution(personGuess, weaponsGuess, roomGuess);
+					suggestionBox.setVisible(false);
+					checkAccusation(playerSol);
+
+
+				}
+			}
+			//if they click cancel
+			class CancelButtonListener implements ActionListener{
+				public void actionPerformed(ActionEvent e) {
+
+					suggestionBox.setVisible(false);
+				}
+			}
+
+			//adding listener to the buttons so they work
+			submit.addActionListener(new SubmitButtonListener());
+			cancel.addActionListener(new CancelButtonListener());
+		}
+		else {
+			JOptionPane splashScreen = new JOptionPane();
+			splashScreen.showMessageDialog(this, "You cannot make an accusation at this time", "Error", JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

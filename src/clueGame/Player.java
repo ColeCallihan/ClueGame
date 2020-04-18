@@ -23,6 +23,7 @@ public class Player {
 	
 	//Instance variables to tell if the player is complete with their turn
 	protected boolean doneTurn = false;
+	protected boolean startTurn = false;
 	
 	//Keeps track of the last room the player was in
 	protected BoardCell prevRoom;
@@ -248,5 +249,18 @@ public class Player {
 	 */
 	public void makeMove(Set<BoardCell> targets) {
 		//System.out.println("Wrong move");
+	}
+
+	public Solution generateSolution() {
+		//Gets overridden by computer player
+		return null;
+	}
+	//Getting the start turn boolean
+	public boolean getStartTurn() {
+		return startTurn;
+	}
+	//Setting the start turn boolean
+	public void setStartTurn(boolean b) {
+		startTurn = b;
 	}
 }

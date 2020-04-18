@@ -36,6 +36,7 @@ public class ComputerPlayer extends Player{
 	 * Constructs a solution that becomes an accusation when the computer has narrowed down the solution
 	 * Becomes a suggestion otherwise
 	 */
+	@Override
 	public Solution generateSolution() {
 
 		//If the computer player has narrowed down to the solution, they will make an accusation, ending the game.
@@ -70,14 +71,14 @@ public class ComputerPlayer extends Player{
 		}
 		if(prevRoom != null) {
 			for(BoardCell target : targets) {
-				if(target.isDoorway() && prevRoom.isDoorway() && prevRoom.getInitial() == target.getInitial()) {
+				if(target.isDoorway() && prevRoom.isDoorway() && (prevRoom.getInitial() == target.getInitial())) {
 					roomList.remove(target);
 				}
 			}
 		}
 
 		Random rand = new Random();
-		//If the roomList does not contain any new rooms, pick a random target from the HashSet
+		//If the roomList does not contain any new rooms, pick a random target
 		if(roomList.isEmpty() == true) {
 			int stop = rand.nextInt(targets.size());
 			int count = 0;
@@ -91,7 +92,7 @@ public class ComputerPlayer extends Player{
 			}
 		}
 		else {
-			//HashSet organizes rooms randomly so a random room is chosen
+			//Random Room is chosen
 			int stop = rand.nextInt(roomList.size());
 			return roomList.get(stop);
 		}
@@ -103,7 +104,7 @@ public class ComputerPlayer extends Player{
 	 * Ends the game if the player guessed the right thing, otherwise continues the game
 	 */
 	public void makeAccusation(String person, String weapon, String room) {
-		boolean matchesSolution = Board.getInstance().checkAccusation(new Solution(person, weapon, room));
+		Board.getInstance().checkAccusation(new Solution(person, weapon, room));
 		//Ends the game
 	}
 
@@ -115,6 +116,7 @@ public class ComputerPlayer extends Player{
 	 */
 	@Override
 	public void makeMove(Set<BoardCell> targets) {
+		startTurn = false;
 		BoardCell newLocation = pickLocation(targets);
 		BoardCell lastRoom = super.getCurrentRoom();
 		

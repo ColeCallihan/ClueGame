@@ -123,6 +123,7 @@ class gameActionTest {
 		
 		//if room in list that was not just visited, must select it
 		board.calcTargets(15,21,1);
+		player.setPrevRoom(null);
 		BoardCell selected = player.pickLocation(board.getTargets());
 		assertEquals(selected, board.getCellAt(15, 22));
 	

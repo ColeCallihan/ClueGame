@@ -39,11 +39,15 @@ public class HumanPlayer extends Player{
 	 */
 	@Override
 	public void makeMove(BoardCell target) {
+		startTurn = false;
 		this.setRow(target.getRow());
 		this.setColumn(target.getColumn());
 		Board board = Board.getInstance();
 		super.setCurrentRoom(board.getCellAt(this.getRow(), this.getColumn()));
-		setDoneTurn(true);
+		if(!getCurrentRoom().isDoorway()) {
+			setDoneTurn(true);
+		}
+		
 		//System.out.println("Yo, I moved");
 	}
 	

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,7 +26,7 @@ public class GameControlPanel extends JPanel {
 
 	private static String currentPlayerName = "";
 
-	Board board = Board.getInstance();
+	static Board board = Board.getInstance();
 
 	private JButton nextPlayer;
 	private JButton makeAccusation;
@@ -146,11 +147,11 @@ public class GameControlPanel extends JPanel {
 		JLabel label = new JLabel("Guess");
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setPreferredSize(new Dimension(300, 80));
+		panel.setPreferredSize(new Dimension(400, 80));
 		guessText = new JTextField();
 
 		//Settings dimensions and size
-		guessText.setPreferredSize(new Dimension(500, 25));
+		guessText.setPreferredSize(new Dimension(600, 25));
 		guessText.setEditable(false);
 
 		//Setting Border Label
@@ -190,6 +191,7 @@ public class GameControlPanel extends JPanel {
 		//Initial Constructors
 		nextPlayer = new JButton("Next player");
 
+		System.out.println(board.theAnswer.person + " " + board.theAnswer.weapon + " " + board.theAnswer.room );
 		//Creates a button listener that will increment to the next player's turn if they are finished
 		class NextPlayerButtonListener implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
@@ -198,6 +200,7 @@ public class GameControlPanel extends JPanel {
 					//If it is the beginning of the game, the current player is the first player, and start their turn
 					if(board.getCurrentPlayerIndex() == -1) {
 						board.advanceNextPlayer();
+						board.getCurrentPlayer().setStartTurn(true);
 						board.startNextTurn();
 						updatePanelDiceAndPlayer();
 						//if the current player is human, repaint the board to display the targets
@@ -206,7 +209,7 @@ public class GameControlPanel extends JPanel {
 							//suggestion possibility
 
 						}
-						//updatePanelGuessAndResult();
+						updatePanelGuessAndResult();
 					}
 					//if the human player is not done with their turn, display an error message
 					else if(board.getCurrentPlayer().getDoneTurn() == false) {
@@ -220,19 +223,21 @@ public class GameControlPanel extends JPanel {
 						board.advanceNextPlayer();
 						board.startNextTurn();
 						updatePanelDiceAndPlayer();
+						updatePanelGuessAndResult();
 						//if the next player is human, repaint their new location on the board and reset their doneTurns status
 						if(board.getCurrentPlayer().getStatus().equals("Human")){
 							board.repaint();
 							board.getCurrentPlayer().setDoneTurn(false);
-							//suggestion possibility
-
 						}
 						//the next player is not human, so just make them move and repaint their new location
 						else {
 							board.getCurrentPlayer().makeMove(board.getTargets());
+							if(board.getCurrentPlayer().getCurrentRoom().isDoorway()) {
+								board.handleSuggestion(board.getCurrentPlayer().generateSolution(), board.getCurrentPlayer());
+							}
 							board.repaint();
 						}
-						//updatePanelGuessAndResult();
+						updatePanelGuessAndResult();
 						//System.out.println(board.getCurrentPlayerIndex());
 					}
 				}
@@ -242,6 +247,7 @@ public class GameControlPanel extends JPanel {
 					//If the next player is a human, it just sets up their turn
 					if(board.getCurrentPlayer().getStatus().equals("Computer")) {
 						board.advanceNextPlayer();
+						board.getCurrentPlayer().setStartTurn(true);
 						board.startNextTurn();
 						//System.out.println(board.getCurrentPlayerIndex());
 						//System.out.println("current player is" + board.getPlayers().get(board.getCurrentPlayerIndex()));
@@ -249,9 +255,14 @@ public class GameControlPanel extends JPanel {
 						//If the next player is a computer, force the computer to move
 						if(board.getCurrentPlayer().getStatus().equals("Computer")) {
 							board.getCurrentPlayer().makeMove(board.getTargets());
+							if(board.getCurrentPlayer().getCurrentRoom().isDoorway()) {
+								board.handleSuggestion(board.getCurrentPlayer().generateSolution(), board.getCurrentPlayer());
+								updatePanelGuessAndResult();
+							}
 						}
+						//Mostly updating stuff
 						board.repaint();
-						//updatePanelGuessAndResult();
+						updatePanelGuessAndResult();
 					}
 				}
 			}
@@ -264,20 +275,26 @@ public class GameControlPanel extends JPanel {
 		return nextPlayer;
 	}
 
+
+
+
+
 	/*
 	 * Creates the accusation button
 	 */
 	private JButton createButtonPanelAccusation() {
 		//Initial Constructors
 		makeAccusation = new JButton("Make an accusation");
-		//JPanel panel = new JPanel();
 
-		//Setting button dimensions
-		//makeAccusation.setPreferredSize(new Dimension(150, 80));
-
-		//Adding to return panel
-		//panel.add(makeAccusation);
-
+		//If they click the accusation button
+		class AccButtonListener implements ActionListener{
+			public void actionPerformed(ActionEvent e) {
+				board.getAccusationFromPlayer();
+			}
+		}
+		//Adds it to the button
+		makeAccusation.addActionListener(new AccButtonListener());
+		
 		return makeAccusation;
 	}
 
@@ -309,14 +326,27 @@ public class GameControlPanel extends JPanel {
 	 * Sets the text of the current guess text box
 	 */
 	public static void setGuessText(String playerGuess) {
-		guessText.setText(playerGuess);
+		if(playerGuess == null)
+		{
+			guessText.setText("No Current Guess");
+		}
+		else {
+			guessText.setText(playerGuess);
+		}
 	}
 
 	/*
 	 * Sets the text of the current guess result text box
 	 */
 	public static void setGuessResultText(String playerGuess) {
-		guessResultText.setText(playerGuess);
+		if(playerGuess == null)
+		{
+			guessResultText.setText("No Card Returned");
+		}
+		else {
+			guessResultText.setText(playerGuess);
+		}
+
 	}
 
 	/*
@@ -329,7 +359,7 @@ public class GameControlPanel extends JPanel {
 	/*
 	 * Sets the text for the guess and guess result text boxes
 	 */
-	public void updatePanelGuessAndResult() {
+	public static void updatePanelGuessAndResult() {
 		setGuessText(board.getGuess());
 		setGuessResultText(board.getGuessResult());
 	}
